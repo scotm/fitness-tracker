@@ -6,15 +6,7 @@ import heroImage from "~/images/conor-tutoring.webp";
 import { auth } from "~/server/auth";
 import { HydrateClient, api } from "~/trpc/server";
 import { HomepageFeatures } from "~/components/homepage/HomepageFeatures";
-import { ArrowRight } from "lucide-react";
 import CTASection from "~/components/homepage/CTASection";
-
-type Feature = {
-	name: string;
-	description: string;
-	image_url: string;
-	icon: React.ElementType;
-};
 
 export default async function Home() {
 	const session = await auth();
