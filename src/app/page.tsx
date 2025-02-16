@@ -40,7 +40,7 @@ export default async function Home() {
 							<div className="mt-10 flex items-center gap-x-8">
 								<Link
 									href="/auth/register"
-									className="rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+									className="rounded-md bg-blue-600 px-3.5 py-2.5 font-semibold text-sm text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600 focus-visible:outline-offset-2"
 								>
 									Get started
 								</Link>
@@ -65,15 +65,15 @@ export default async function Home() {
 				</div>
 
 				{/* Features Section */}
-				<div className="mx-auto max-w-7xl px-6 lg:px-8 border-t border-gray-200 dark:border-gray-800">
+				<div className="mx-auto max-w-7xl border-gray-200 border-t px-6 lg:px-8 dark:border-gray-800">
 					<div className="mx-auto max-w-2xl lg:text-center">
-						<h2 className="text-base font-semibold leading-7 text-blue-600 dark:text-blue-400">
+						<h2 className="font-semibold text-base text-blue-600 leading-7 dark:text-blue-400">
 							Everything you need
 						</h2>
-						<p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
+						<p className="mt-2 font-bold text-3xl text-gray-900 tracking-tight sm:text-4xl dark:text-white">
 							Powerful features for serious athletes
 						</p>
-						<p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400">
+						<p className="mt-6 text-gray-600 text-lg leading-8 dark:text-gray-400">
 							Our comprehensive fitness tracking platform provides all the tools
 							you need to track, analyze, and improve your workouts.
 						</p>
@@ -84,23 +84,23 @@ export default async function Home() {
 				{/* CTA Section */}
 				<div className="mt-32 sm:mt-40">
 					<div className="relative isolate overflow-hidden bg-gray-900 px-6 py-24 text-center shadow-2xl sm:px-16">
-						<h2 className="mx-auto max-w-2xl text-3xl font-bold tracking-tight text-white sm:text-4xl">
+						<h2 className="mx-auto max-w-2xl font-bold text-3xl text-white tracking-tight sm:text-4xl">
 							Start your fitness journey today
 						</h2>
-						<p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-300">
+						<p className="mx-auto mt-6 max-w-xl text-gray-300 text-lg leading-8">
 							Join thousands of athletes who are already tracking their progress
 							and achieving their fitness goals.
 						</p>
 						<div className="mt-10 flex items-center justify-center gap-x-6">
 							<Link
 								href="/auth/register"
-								className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+								className="rounded-md bg-white px-3.5 py-2.5 font-semibold text-gray-900 text-sm shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
 							>
 								Get started
 							</Link>
 							<Link
 								href="/api/auth/signin"
-								className="text-sm font-semibold leading-6 text-white"
+								className="font-semibold text-sm text-white leading-6"
 							>
 								Log in <span aria-hidden="true">→</span>
 							</Link>

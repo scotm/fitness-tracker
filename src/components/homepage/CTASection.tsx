@@ -42,12 +42,12 @@ export default function CTASection() {
 	];
 
 	return (
-		<div className="bg-white dark:bg-gray-900 py-24 sm:py-32">
+		<div className="bg-white py-24 sm:py-32 dark:bg-gray-900">
 			<div className="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
-				<h2 className="text-base/7 font-semibold text-indigo-600 dark:text-blue-400">
+				<h2 className="font-semibold text-base/7 text-indigo-600 dark:text-blue-400">
 					Deploy faster
 				</h2>
-				<p className="mt-2 max-w-lg text-pretty text-4xl font-semibold tracking-tight text-gray-950 dark:text-white sm:text-5xl">
+				<p className="mt-2 max-w-lg text-pretty font-semibold text-4xl text-gray-950 tracking-tight sm:text-5xl dark:text-white">
 					Everything you need to deploy your app
 				</p>
 				<div className="mt-10 grid grid-cols-1 gap-4 sm:mt-16 lg:grid-cols-6 lg:grid-rows-2">
@@ -60,13 +60,13 @@ export default function CTASection() {
 								className="h-80 object-cover object-left"
 							/>
 							<div className="p-10 pt-4">
-								<h3 className="text-sm/4 font-semibold text-indigo-600">
+								<h3 className="font-semibold text-indigo-600 text-sm/4">
 									Performance
 								</h3>
-								<p className="mt-2 text-lg font-medium tracking-tight text-gray-950 dark:text-white">
+								<p className="mt-2 font-medium text-gray-950 text-lg tracking-tight dark:text-white">
 									Lightning-fast builds
 								</p>
-								<p className="mt-2 max-w-lg text-sm/6 text-gray-600 dark:text-gray-400">
+								<p className="mt-2 max-w-lg text-gray-600 text-sm/6 dark:text-gray-400">
 									Lorem ipsum dolor sit amet, consectetur adipiscing elit. In
 									gravida justo et nulla efficitur, maximus egestas sem
 									pellentesque.
@@ -84,13 +84,13 @@ export default function CTASection() {
 								className="h-80 object-cover object-left lg:object-right"
 							/>
 							<div className="p-10 pt-4">
-								<h3 className="text-sm/4 font-semibold text-indigo-600">
+								<h3 className="font-semibold text-indigo-600 text-sm/4">
 									Releases
 								</h3>
-								<p className="mt-2 text-lg font-medium tracking-tight text-gray-950 dark:text-white">
+								<p className="mt-2 font-medium text-gray-950 text-lg tracking-tight dark:text-white">
 									Push to deploy
 								</p>
-								<p className="mt-2 max-w-lg text-sm/6 text-gray-600 dark:text-gray-400">
+								<p className="mt-2 max-w-lg text-gray-600 text-sm/6 dark:text-gray-400">
 									Curabitur auctor, ex quis auctor venenatis, eros arcu rhoncus
 									massa, laoreet dapibus ex elit vitae odio.
 								</p>
@@ -107,13 +107,13 @@ export default function CTASection() {
 								className="h-80 object-cover object-left"
 							/>
 							<div className="p-10 pt-4">
-								<h3 className="text-sm/4 font-semibold text-indigo-600">
+								<h3 className="font-semibold text-indigo-600 text-sm/4">
 									Speed
 								</h3>
-								<p className="mt-2 text-lg font-medium tracking-tight text-gray-950 dark:text-white">
+								<p className="mt-2 font-medium text-gray-950 text-lg tracking-tight dark:text-white">
 									Built for power users
 								</p>
-								<p className="mt-2 max-w-lg text-sm/6 text-gray-600 dark:text-gray-400">
+								<p className="mt-2 max-w-lg text-gray-600 text-sm/6 dark:text-gray-400">
 									Sed congue eros non finibus molestie. Vestibulum euismod
 									augue.
 								</p>
@@ -130,13 +130,13 @@ export default function CTASection() {
 								className="h-80 object-cover"
 							/>
 							<div className="p-10 pt-4">
-								<h3 className="text-sm/4 font-semibold text-indigo-600">
+								<h3 className="font-semibold text-indigo-600 text-sm/4">
 									Integrations
 								</h3>
-								<p className="mt-2 text-lg font-medium tracking-tight text-gray-950 dark:text-white">
+								<p className="mt-2 font-medium text-gray-950 text-lg tracking-tight dark:text-white">
 									Connect your favorite tools
 								</p>
-								<p className="mt-2 max-w-lg text-sm/6 text-gray-600 dark:text-gray-400">
+								<p className="mt-2 max-w-lg text-gray-600 text-sm/6 dark:text-gray-400">
 									Maecenas at augue sed elit dictum vulputate, in nisi aliquam
 									maximus arcu.
 								</p>
@@ -153,13 +153,13 @@ export default function CTASection() {
 								className="h-80 object-cover"
 							/>
 							<div className="p-10 pt-4">
-								<h3 className="text-sm/4 font-semibold text-indigo-600">
+								<h3 className="font-semibold text-indigo-600 text-sm/4">
 									Network
 								</h3>
-								<p className="mt-2 text-lg font-medium tracking-tight text-gray-950 dark:text-white">
+								<p className="mt-2 font-medium text-gray-950 text-lg tracking-tight dark:text-white">
 									Globally distributed CDN
 								</p>
-								<p className="mt-2 max-w-lg text-sm/6 text-gray-600 dark:text-gray-400">
+								<p className="mt-2 max-w-lg text-gray-600 text-sm/6 dark:text-gray-400">
 									Aenean vulputate justo commodo auctor vehicula in malesuada
 									semper.
 								</p>

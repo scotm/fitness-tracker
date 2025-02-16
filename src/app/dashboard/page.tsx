@@ -54,7 +54,7 @@ export default async function DashboardPage() {
 	return (
 		<main className="space-y-6">
 			<header>
-				<h1 className="text-2xl font-bold tracking-tight">
+				<h1 className="font-bold text-2xl tracking-tight">
 					Welcome back, {user?.name || "Athlete"}
 				</h1>
 				<p className="text-gray-500">
@@ -64,7 +64,7 @@ export default async function DashboardPage() {
 
 			{/* Quick Stats */}
 			<section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-				<div className="bg-white overflow-hidden rounded-lg shadow">
+				<div className="overflow-hidden rounded-lg bg-white shadow">
 					<div className="p-5">
 						<div className="flex items-center">
 							<div className="flex-shrink-0">
@@ -72,17 +72,17 @@ export default async function DashboardPage() {
 							</div>
 							<div className="ml-5 w-0 flex-1">
 								<dl>
-									<dt className="text-sm font-medium text-gray-500 truncate">
+									<dt className="truncate font-medium text-gray-500 text-sm">
 										Personal Records
 									</dt>
-									<dd className="text-lg font-medium text-gray-900">12</dd>
+									<dd className="font-medium text-gray-900 text-lg">12</dd>
 								</dl>
 							</div>
 						</div>
 					</div>
 				</div>
 
-				<div className="bg-white overflow-hidden rounded-lg shadow">
+				<div className="overflow-hidden rounded-lg bg-white shadow">
 					<div className="p-5">
 						<div className="flex items-center">
 							<div className="flex-shrink-0">
@@ -90,17 +90,17 @@ export default async function DashboardPage() {
 							</div>
 							<div className="ml-5 w-0 flex-1">
 								<dl>
-									<dt className="text-sm font-medium text-gray-500 truncate">
+									<dt className="truncate font-medium text-gray-500 text-sm">
 										Workouts Completed
 									</dt>
-									<dd className="text-lg font-medium text-gray-900">48</dd>
+									<dd className="font-medium text-gray-900 text-lg">48</dd>
 								</dl>
 							</div>
 						</div>
 					</div>
 				</div>
 
-				<div className="bg-white overflow-hidden rounded-lg shadow">
+				<div className="overflow-hidden rounded-lg bg-white shadow">
 					<div className="p-5">
 						<div className="flex items-center">
 							<div className="flex-shrink-0">
@@ -108,17 +108,17 @@ export default async function DashboardPage() {
 							</div>
 							<div className="ml-5 w-0 flex-1">
 								<dl>
-									<dt className="text-sm font-medium text-gray-500 truncate">
+									<dt className="truncate font-medium text-gray-500 text-sm">
 										Total Time
 									</dt>
-									<dd className="text-lg font-medium text-gray-900">72h</dd>
+									<dd className="font-medium text-gray-900 text-lg">72h</dd>
 								</dl>
 							</div>
 						</div>
 					</div>
 				</div>
 
-				<div className="bg-white overflow-hidden rounded-lg shadow">
+				<div className="overflow-hidden rounded-lg bg-white shadow">
 					<div className="p-5">
 						<div className="flex items-center">
 							<div className="flex-shrink-0">
@@ -126,10 +126,10 @@ export default async function DashboardPage() {
 							</div>
 							<div className="ml-5 w-0 flex-1">
 								<dl>
-									<dt className="text-sm font-medium text-gray-500 truncate">
+									<dt className="truncate font-medium text-gray-500 text-sm">
 										Active Streak
 									</dt>
-									<dd className="text-lg font-medium text-gray-900">5 days</dd>
+									<dd className="font-medium text-gray-900 text-lg">5 days</dd>
 								</dl>
 							</div>
 						</div>
@@ -139,24 +139,24 @@ export default async function DashboardPage() {
 
 			{/* Quick Actions */}
 			<section>
-				<h2 className="text-lg font-medium mb-4">Quick Actions</h2>
+				<h2 className="mb-4 font-medium text-lg">Quick Actions</h2>
 				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
 					{quickActions.map((action) => (
 						<Link
 							key={action.name}
 							href={action.href}
-							className="relative group bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+							className="group relative rounded-lg bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
 						>
 							<div>
 								<span
-									className={`inline-flex p-3 rounded-lg ${action.color} text-white`}
+									className={`inline-flex rounded-lg p-3 ${action.color} text-white`}
 								>
 									<action.icon className="h-6 w-6" aria-hidden="true" />
 								</span>
 							</div>
 							<div className="mt-4">
-								<h3 className="text-lg font-medium">{action.name}</h3>
-								<p className="mt-2 text-sm text-gray-500">
+								<h3 className="font-medium text-lg">{action.name}</h3>
+								<p className="mt-2 text-gray-500 text-sm">
 									{action.description}
 								</p>
 							</div>
@@ -172,16 +172,16 @@ export default async function DashboardPage() {
 
 			{/* Recent Workouts */}
 			<section>
-				<div className="flex items-center justify-between mb-4">
-					<h2 className="text-lg font-medium">Recent Workouts</h2>
+				<div className="mb-4 flex items-center justify-between">
+					<h2 className="font-medium text-lg">Recent Workouts</h2>
 					<Link
 						href="/dashboard/workouts"
-						className="text-sm font-medium text-blue-600 hover:text-blue-500"
+						className="font-medium text-blue-600 text-sm hover:text-blue-500"
 					>
 						View all
 					</Link>
 				</div>
-				<div className="bg-white shadow rounded-lg">
+				<div className="rounded-lg bg-white shadow">
 					<div className="p-6 text-center text-gray-500">
 						No recent workouts. Start your fitness journey today!
 					</div>

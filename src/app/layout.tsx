@@ -26,7 +26,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
 	return (
 		<html lang="en" className={`${inter.className}`}>
-			<body className="bg-white dark:bg-gray-900 text-black dark:text-white min-h-screen relative">
+			<body className="relative min-h-screen bg-white text-black dark:bg-gray-900 dark:text-white">
 				<ThemeProvider>
 					<TRPCReactProvider>
 						<main className="min-h-screen">
