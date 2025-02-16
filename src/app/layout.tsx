@@ -4,6 +4,7 @@ import { TRPCReactProvider } from "~/trpc/react";
 import { ThemeProvider } from "~/state/ThemeProvider";
 import { ThemeToggle } from "~/components/ThemeToggle";
 import type { Metadata } from "next";
+import Header from "~/components/Layout/Header";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,6 +31,7 @@ export default function RootLayout({
 				<ThemeProvider>
 					<TRPCReactProvider>
 						<main className="min-h-screen">
+							<Header />
 							<ThemeToggle />
 							{children}
 						</main>

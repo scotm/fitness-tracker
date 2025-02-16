@@ -1,173 +1,29 @@
-import {
-	ArrowRight,
-	Calendar,
-	Dumbbell,
-	LineChart,
-	Timer,
-	Trophy,
-} from "lucide-react";
-
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 export default function CTASection() {
-	const features = [
-		{
-			name: "Exercise Library",
-			description:
-				"Access a comprehensive database of exercises with detailed instructions and form guides.",
-			icon: Dumbbell,
-		},
-		{
-			name: "Workout Tracking",
-			description:
-				"Log your workouts, track sets, reps, and weights with an intuitive interface.",
-			icon: Calendar,
-		},
-		{
-			name: "Progress Analytics",
-			description:
-				"Visualize your progress with detailed charts and performance metrics.",
-			icon: LineChart,
-		},
-		{
-			name: "Rest Timer",
-			description:
-				"Built-in rest timer to optimize your workout intervals and recovery.",
-			icon: Timer,
-		},
-		{
-			name: "Personal Records",
-			description:
-				"Track and celebrate your personal bests across all exercises.",
-			icon: Trophy,
-		},
-	];
-
 	return (
-		<div className="bg-white py-24 sm:py-32 dark:bg-gray-900">
-			<div className="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
-				<h2 className="font-semibold text-base/7 text-indigo-600 dark:text-blue-400">
-					Deploy faster
-				</h2>
-				<p className="mt-2 max-w-lg text-pretty font-semibold text-4xl text-gray-950 tracking-tight sm:text-5xl dark:text-white">
-					Everything you need to deploy your app
-				</p>
-				<div className="mt-10 grid grid-cols-1 gap-4 sm:mt-16 lg:grid-cols-6 lg:grid-rows-2">
-					<div className="relative lg:col-span-3">
-						<div className="absolute inset-px rounded-lg bg-white max-lg:rounded-t-[2rem] lg:rounded-tl-[2rem]" />
-						<div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] max-lg:rounded-t-[calc(2rem+1px)] lg:rounded-tl-[calc(2rem+1px)]">
-							<img
-								alt=""
-								src="https://tailwindui.com/plus-assets/img/component-images/bento-01-performance.png"
-								className="h-80 object-cover object-left"
-							/>
-							<div className="p-10 pt-4">
-								<h3 className="font-semibold text-indigo-600 text-sm/4">
-									Performance
-								</h3>
-								<p className="mt-2 font-medium text-gray-950 text-lg tracking-tight dark:text-white">
-									Lightning-fast builds
-								</p>
-								<p className="mt-2 max-w-lg text-gray-600 text-sm/6 dark:text-gray-400">
-									Lorem ipsum dolor sit amet, consectetur adipiscing elit. In
-									gravida justo et nulla efficitur, maximus egestas sem
-									pellentesque.
-								</p>
-							</div>
-						</div>
-						<div className="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 max-lg:rounded-t-[2rem] lg:rounded-tl-[2rem]" />
-					</div>
-					<div className="relative lg:col-span-3">
-						<div className="absolute inset-px rounded-lg bg-white lg:rounded-tr-[2rem]" />
-						<div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] lg:rounded-tr-[calc(2rem+1px)]">
-							<img
-								alt=""
-								src="https://tailwindui.com/plus-assets/img/component-images/bento-01-releases.png"
-								className="h-80 object-cover object-left lg:object-right"
-							/>
-							<div className="p-10 pt-4">
-								<h3 className="font-semibold text-indigo-600 text-sm/4">
-									Releases
-								</h3>
-								<p className="mt-2 font-medium text-gray-950 text-lg tracking-tight dark:text-white">
-									Push to deploy
-								</p>
-								<p className="mt-2 max-w-lg text-gray-600 text-sm/6 dark:text-gray-400">
-									Curabitur auctor, ex quis auctor venenatis, eros arcu rhoncus
-									massa, laoreet dapibus ex elit vitae odio.
-								</p>
-							</div>
-						</div>
-						<div className="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 lg:rounded-tr-[2rem]" />
-					</div>
-					<div className="relative lg:col-span-2">
-						<div className="absolute inset-px rounded-lg bg-white lg:rounded-bl-[2rem]" />
-						<div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] lg:rounded-bl-[calc(2rem+1px)]">
-							<img
-								alt=""
-								src="https://tailwindui.com/plus-assets/img/component-images/bento-01-speed.png"
-								className="h-80 object-cover object-left"
-							/>
-							<div className="p-10 pt-4">
-								<h3 className="font-semibold text-indigo-600 text-sm/4">
-									Speed
-								</h3>
-								<p className="mt-2 font-medium text-gray-950 text-lg tracking-tight dark:text-white">
-									Built for power users
-								</p>
-								<p className="mt-2 max-w-lg text-gray-600 text-sm/6 dark:text-gray-400">
-									Sed congue eros non finibus molestie. Vestibulum euismod
-									augue.
-								</p>
-							</div>
-						</div>
-						<div className="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 lg:rounded-bl-[2rem]" />
-					</div>
-					<div className="relative lg:col-span-2">
-						<div className="absolute inset-px rounded-lg bg-white" />
-						<div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)]">
-							<img
-								alt=""
-								src="https://tailwindui.com/plus-assets/img/component-images/bento-01-integrations.png"
-								className="h-80 object-cover"
-							/>
-							<div className="p-10 pt-4">
-								<h3 className="font-semibold text-indigo-600 text-sm/4">
-									Integrations
-								</h3>
-								<p className="mt-2 font-medium text-gray-950 text-lg tracking-tight dark:text-white">
-									Connect your favorite tools
-								</p>
-								<p className="mt-2 max-w-lg text-gray-600 text-sm/6 dark:text-gray-400">
-									Maecenas at augue sed elit dictum vulputate, in nisi aliquam
-									maximus arcu.
-								</p>
-							</div>
-						</div>
-						<div className="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5" />
-					</div>
-					<div className="relative lg:col-span-2">
-						<div className="absolute inset-px rounded-lg bg-white max-lg:rounded-b-[2rem] lg:rounded-br-[2rem]" />
-						<div className="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] max-lg:rounded-b-[calc(2rem+1px)] lg:rounded-br-[calc(2rem+1px)]">
-							<img
-								alt=""
-								src="https://tailwindui.com/plus-assets/img/component-images/bento-01-network.png"
-								className="h-80 object-cover"
-							/>
-							<div className="p-10 pt-4">
-								<h3 className="font-semibold text-indigo-600 text-sm/4">
-									Network
-								</h3>
-								<p className="mt-2 font-medium text-gray-950 text-lg tracking-tight dark:text-white">
-									Globally distributed CDN
-								</p>
-								<p className="mt-2 max-w-lg text-gray-600 text-sm/6 dark:text-gray-400">
-									Aenean vulputate justo commodo auctor vehicula in malesuada
-									semper.
-								</p>
-							</div>
-						</div>
-						<div className="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 max-lg:rounded-b-[2rem] lg:rounded-br-[2rem]" />
-					</div>
-				</div>
+		<div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-xl lg:flex-shrink-0 lg:pt-8">
+			<h1 className="mt-10 font-bold text-4xl text-gray-900 tracking-tight sm:text-6xl dark:text-white">
+				Track Your Fitness Journey
+			</h1>
+			<p className="mt-6 text-gray-600 text-lg leading-8 dark:text-gray-400">
+				Take control of your fitness journey with our comprehensive workout
+				tracking platform. Log workouts, track progress, and achieve your
+				fitness goals.
+			</p>
+			<div className="mt-10 flex items-center gap-x-8">
+				<Link
+					href="/auth/register"
+					className="rounded-md bg-blue-600 px-3.5 py-2.5 font-semibold text-sm text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600 focus-visible:outline-offset-2"
+				>
+					Get started
+				</Link>
+				<Link
+					href="/api/auth/signin"
+					className="flex items-center gap-x-4 font-semibold text-gray-900 text-sm leading-6 dark:text-white"
+				>
+					Log in <ArrowRight className="h-4 w-4" />
+				</Link>
 			</div>
 		</div>
 	);

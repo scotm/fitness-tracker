@@ -41,14 +41,8 @@ declare module "next-auth" {
  */
 export const authConfig = {
 	providers: [
-		DiscordProvider({
-			clientId: env.AUTH_DISCORD_ID,
-			clientSecret: env.AUTH_DISCORD_SECRET,
-		}),
-		GoogleProvider({
-			clientId: env.GOOGLE_CLIENT_ID,
-			clientSecret: env.GOOGLE_CLIENT_SECRET,
-		}),
+		DiscordProvider,
+		GoogleProvider,
 		GithubProvider({
 			clientId: env.GITHUB_CLIENT_ID,
 			clientSecret: env.GITHUB_CLIENT_SECRET,

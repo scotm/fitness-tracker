@@ -1,18 +1,18 @@
 import type React from "react";
-import Image from "next/image";
-import {
-	ArrowRight,
-	Calendar,
-	Dumbbell,
-	LineChart,
-	Timer,
-	Trophy,
-} from "lucide-react";
+import Image, { type StaticImageData } from "next/image";
+import { Calendar, Dumbbell, LineChart, Timer, Trophy } from "lucide-react";
+
+import equipmentImage from "~/images/fitness-594143_640.jpg";
+import workoutImage from "~/images/woman-2260736_640.jpg";
+import progressImage from "~/images/control-2721901_640.jpg";
+import analyticsImage from "~/images/analytics-925379_640.jpg";
+import restTimerImage from "~/images/casio-8392121_640.jpg";
+import personalRecordsImage from "~/images/hands-1851218_640.jpg";
 
 type Feature = {
 	name: string;
 	description: string;
-	image_url: string;
+	image_url: StaticImageData;
 	icon: React.ElementType;
 };
 
@@ -22,48 +22,42 @@ export const HomepageFeatures = () => {
 			name: "Exercise Library",
 			description:
 				"Access a comprehensive database of exercises with detailed instructions and form guides.",
-			image_url:
-				"https://tailwindui.com/plus-assets/img/component-images/bento-01-speed.png",
+			image_url: equipmentImage,
 			icon: Dumbbell,
 		},
 		{
 			name: "Workout Builder",
 			description:
 				"Get and adjust a personalized fitness plan tailored to your goals and preferences.",
-			image_url:
-				"https://tailwindui.com/plus-assets/img/component-images/bento-01-speed.png",
+			image_url: workoutImage,
 			icon: Dumbbell,
 		},
 		{
 			name: "Workout Tracking",
 			description:
 				"Log your workouts, track sets, reps, and weights with an intuitive interface.",
-			image_url:
-				"https://tailwindui.com/plus-assets/img/component-images/bento-01-speed.png",
+			image_url: progressImage,
 			icon: Calendar,
 		},
 		{
 			name: "Progress Analytics",
 			description:
 				"Visualize your progress with detailed charts and performance metrics.",
-			image_url:
-				"https://tailwindui.com/plus-assets/img/component-images/bento-01-speed.png",
+			image_url: analyticsImage,
 			icon: LineChart,
 		},
 		{
 			name: "Rest Timer",
 			description:
 				"Built-in rest timer to optimize your workout intervals and recovery.",
-			image_url:
-				"https://tailwindui.com/plus-assets/img/component-images/bento-01-speed.png",
+			image_url: restTimerImage,
 			icon: Timer,
 		},
 		{
 			name: "Personal Records",
 			description:
 				"Track and celebrate your personal bests across all exercises.",
-			image_url:
-				"https://tailwindui.com/plus-assets/img/component-images/bento-01-speed.png",
+			image_url: personalRecordsImage,
 			icon: Trophy,
 		},
 	];
@@ -80,16 +74,16 @@ export const HomepageFeatures = () => {
 							/>
 							{feature.name}
 						</dt>
-						<dd className="mt-4 flex flex-auto flex-col text-base text-gray-600 leading-7 dark:text-gray-400">
+						<dd className="mt-4 flex flex-auto flex-col gap-y-4 text-base text-gray-600 leading-7 dark:text-gray-400">
 							<p className="flex-auto">{feature.description}</p>
+							<Image
+								width={384}
+								height={216}
+								src={feature.image_url}
+								alt={feature.name}
+								className="rounded-md shadow-lg"
+							/>
 						</dd>
-						<Image
-							width={500}
-							height={500}
-							src={feature.image_url}
-							alt={feature.name}
-							className="rounded-md shadow-lg"
-						/>
 					</div>
 				))}
 			</dl>
