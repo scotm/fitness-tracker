@@ -1,13 +1,13 @@
-import type React from "react";
-import Image, { type StaticImageData } from "next/image";
 import { Calendar, Dumbbell, LineChart, Timer, Trophy } from "lucide-react";
+import Image, { type StaticImageData } from "next/image";
+import type React from "react";
 
-import equipmentImage from "~/images/fitness-594143_640.jpg";
-import workoutImage from "~/images/woman-2260736_640.jpg";
-import progressImage from "~/images/control-2721901_640.jpg";
 import analyticsImage from "~/images/analytics-925379_640.jpg";
 import restTimerImage from "~/images/casio-8392121_640.jpg";
+import progressImage from "~/images/control-2721901_640.jpg";
+import equipmentImage from "~/images/fitness-594143_640.jpg";
 import personalRecordsImage from "~/images/hands-1851218_640.jpg";
+import workoutImage from "~/images/woman-2260736_640.jpg";
 
 type Feature = {
 	name: string;

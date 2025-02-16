@@ -7,9 +7,7 @@ import "./src/env.js";
 /** @type {import("next").NextConfig} */
 const config = {
 	images: {
-		remotePatterns: [
-			{ hostname: "tailwindui.com" },
-		],
+		remotePatterns: [{ hostname: "tailwindui.com" }],
 	},
 };
 

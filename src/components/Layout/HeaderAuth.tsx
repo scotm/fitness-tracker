@@ -1,5 +1,5 @@
-import React from "react";
 import { useSession } from "next-auth/react";
+import React from "react";
 
 export const HeaderAuth = () => {
 	const { data: session } = useSession();

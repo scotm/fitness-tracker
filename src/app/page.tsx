@@ -1,12 +1,12 @@
+import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import Image from "next/image";
+import CTASection from "~/components/homepage/CTASection";
+import { HomepageFeatures } from "~/components/homepage/HomepageFeatures";
 import heroImage from "~/images/conor-tutoring.webp";
 // import { LatestPost } from "~/app/_components/post";
 import { auth } from "~/server/auth";
 import { HydrateClient, api } from "~/trpc/server";
-import { HomepageFeatures } from "~/components/homepage/HomepageFeatures";
-import CTASection from "~/components/homepage/CTASection";
 
 export default async function Home() {
 	const session = await auth();

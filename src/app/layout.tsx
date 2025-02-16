@@ -1,10 +1,10 @@
 import "~/styles/globals.css";
-import { Inter } from "next/font/google";
-import { TRPCReactProvider } from "~/trpc/react";
-import { ThemeProvider } from "~/state/ThemeProvider";
-import { ThemeToggle } from "~/components/ThemeToggle";
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import Header from "~/components/Layout/Header";
+import { ThemeToggle } from "~/components/ThemeToggle";
+import { ThemeProvider } from "~/state/ThemeProvider";
+import { TRPCReactProvider } from "~/trpc/react";
 
 const inter = Inter({ subsets: ["latin"] });
 

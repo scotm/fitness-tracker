@@ -1,7 +1,5 @@
 "use client";
 
-import { SessionProvider } from "next-auth/react";
-import { useState, Suspense } from "react";
 import {
 	Dialog,
 	DialogPanel,
@@ -14,6 +12,11 @@ import {
 	PopoverPanel,
 } from "@headlessui/react";
 import {
+	ChevronDownIcon,
+	PhoneIcon,
+	PlayCircleIcon,
+} from "@heroicons/react/20/solid";
+import {
 	ArrowPathIcon,
 	Bars3Icon,
 	ChartPieIcon,
@@ -22,11 +25,8 @@ import {
 	SquaresPlusIcon,
 	XMarkIcon,
 } from "@heroicons/react/24/outline";
-import {
-	ChevronDownIcon,
-	PhoneIcon,
-	PlayCircleIcon,
-} from "@heroicons/react/20/solid";
+import { SessionProvider } from "next-auth/react";
+import { Suspense, useState } from "react";
 import { HeaderAuth } from "./HeaderAuth";
 
 const products = [
