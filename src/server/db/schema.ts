@@ -3,6 +3,7 @@ import {
 	index,
 	int,
 	primaryKey,
+	real,
 	sqliteTableCreator,
 	text,
 } from "drizzle-orm/sqlite-core";
@@ -16,27 +17,6 @@ import type { AdapterAccount } from "next-auth/adapters";
  */
 export const createTable = sqliteTableCreator(
 	(name) => `fitness-tracker_${name}`,
-);
-
-export const posts = createTable(
-	"post",
-	{
-		id: int("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
-		name: text("name", { length: 256 }),
-		createdById: text("created_by", { length: 255 })
-			.notNull()
-			.references(() => users.id),
-		createdAt: int("created_at", { mode: "timestamp" })
-			.default(sql`(unixepoch())`)
-			.notNull(),
-		updatedAt: int("updatedAt", { mode: "timestamp" }).$onUpdate(
-			() => new Date(),
-		),
-	},
-	(example) => ({
-		createdByIdIdx: index("created_by_idx").on(example.createdById),
-		nameIndex: index("name_idx").on(example.name),
-	}),
 );
 
 export const users = createTable("user", {
@@ -68,6 +48,7 @@ export const accounts = createTable(
 		provider: text("provider", { length: 255 }).notNull(),
 		providerAccountId: text("provider_account_id", { length: 255 }).notNull(),
 		refresh_token: text("refresh_token"),
+		refresh_token_expires_in: int("refresh_token_expires_in"),
 		access_token: text("access_token"),
 		expires_at: int("expires_at"),
 		token_type: text("token_type", { length: 255 }),
@@ -116,3 +97,82 @@ export const verificationTokens = createTable(
 		compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
 	}),
 );
+
+export const exercises = createTable("exercises", {
+	id: text("id").primaryKey(),
+	name: text("name").notNull(),
+	category: text("category").notNull(),
+	description: text("description"),
+	difficulty: text("difficulty"),
+	targetMuscles: text("target_muscles"),
+	createdAt: int("created_at", { mode: "timestamp" })
+		.default(sql`(unixepoch())`)
+		.notNull(),
+	updatedAt: int("updatedAt", { mode: "timestamp" }).$onUpdate(
+		() => new Date(),
+	),
+});
+
+export const workouts = createTable("workouts", {
+	id: text("id").primaryKey(),
+	userId: text("user_id")
+		.notNull()
+		.references(() => users.id),
+	name: text("name").notNull(),
+	description: text("description"),
+	createdAt: int("created_at", { mode: "timestamp" })
+		.default(sql`(unixepoch())`)
+		.notNull(),
+	updatedAt: int("updatedAt", { mode: "timestamp" }).$onUpdate(
+		() => new Date(),
+	),
+});
+
+export const workoutExercises = createTable("workout_exercises", {
+	id: text("id").primaryKey(),
+	workoutId: text("workout_id")
+		.notNull()
+		.references(() => workouts.id),
+	exerciseId: text("exercise_id")
+		.notNull()
+		.references(() => exercises.id),
+	sets: int("sets"),
+	reps: int("reps"),
+	weight: real("weight"),
+	duration: int("duration"),
+	order: int("order"),
+});
+
+export const exerciseLogs = createTable("exercise_logs", {
+	id: text("id").primaryKey(),
+	userId: text("user_id")
+		.notNull()
+		.references(() => users.id),
+	exerciseId: text("exercise_id")
+		.notNull()
+		.references(() => exercises.id),
+	workoutId: text("workout_id").references(() => workouts.id),
+	sets: int("sets"),
+	reps: int("reps"),
+	weight: real("weight"),
+	duration: int("duration"),
+	notes: text("notes"),
+	completedAt: int("completed_at", { mode: "timestamp" })
+		.default(sql`(unixepoch())`)
+		.notNull(),
+});
+
+export const personalRecords = createTable("personal_records", {
+	id: text("id").primaryKey(),
+	userId: text("user_id")
+		.notNull()
+		.references(() => users.id),
+	exerciseId: text("exercise_id")
+		.notNull()
+		.references(() => exercises.id),
+	value: real("value").notNull(),
+	type: text("type").notNull(), // e.g., "weight", "reps", "duration"
+	achievedAt: int("achieved_at", { mode: "timestamp" })
+		.default(sql`(unixepoch())`)
+		.notNull(),
+});
