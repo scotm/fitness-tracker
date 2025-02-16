@@ -52,84 +52,92 @@ export default async function DashboardPage() {
 	];
 
 	return (
-		<main className="space-y-6">
+		<main className="mx-auto max-w-7xl space-y-6">
 			<header>
-				<h1 className="font-bold text-2xl tracking-tight">
+				<h1 className="font-bold text-2xl tracking-tight dark:text-white">
 					Welcome back, {user?.name || "Athlete"}
 				</h1>
-				<p className="text-gray-500">
+				<p className="text-gray-500 dark:text-gray-400">
 					Here&apos;s what&apos;s happening with your fitness journey.
 				</p>
 			</header>
 
 			{/* Quick Stats */}
 			<section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-				<div className="overflow-hidden rounded-lg bg-white shadow">
+				<div className="overflow-hidden rounded-lg bg-white shadow-sm dark:bg-gray-800">
 					<div className="p-5">
 						<div className="flex items-center">
-							<div className="flex-shrink-0">
+							<div className="shrink-0">
 								<Trophy className="h-6 w-6 text-yellow-400" />
 							</div>
 							<div className="ml-5 w-0 flex-1">
 								<dl>
-									<dt className="truncate font-medium text-gray-500 text-sm">
+									<dt className="truncate font-medium text-gray-500 text-sm dark:text-gray-400">
 										Personal Records
 									</dt>
-									<dd className="font-medium text-gray-900 text-lg">12</dd>
+									<dd className="font-medium text-gray-900 text-lg dark:text-white">
+										12
+									</dd>
 								</dl>
 							</div>
 						</div>
 					</div>
 				</div>
 
-				<div className="overflow-hidden rounded-lg bg-white shadow">
+				<div className="overflow-hidden rounded-lg bg-white shadow-sm dark:bg-gray-800">
 					<div className="p-5">
 						<div className="flex items-center">
-							<div className="flex-shrink-0">
+							<div className="shrink-0">
 								<History className="h-6 w-6 text-blue-400" />
 							</div>
 							<div className="ml-5 w-0 flex-1">
 								<dl>
-									<dt className="truncate font-medium text-gray-500 text-sm">
+									<dt className="truncate font-medium text-gray-500 text-sm dark:text-gray-400">
 										Workouts Completed
 									</dt>
-									<dd className="font-medium text-gray-900 text-lg">48</dd>
+									<dd className="font-medium text-gray-900 text-lg dark:text-white">
+										48
+									</dd>
 								</dl>
 							</div>
 						</div>
 					</div>
 				</div>
 
-				<div className="overflow-hidden rounded-lg bg-white shadow">
+				<div className="overflow-hidden rounded-lg bg-white shadow-sm dark:bg-gray-800">
 					<div className="p-5">
 						<div className="flex items-center">
-							<div className="flex-shrink-0">
+							<div className="shrink-0">
 								<Timer className="h-6 w-6 text-green-400" />
 							</div>
 							<div className="ml-5 w-0 flex-1">
 								<dl>
-									<dt className="truncate font-medium text-gray-500 text-sm">
+									<dt className="truncate font-medium text-gray-500 text-sm dark:text-gray-400">
 										Total Time
 									</dt>
-									<dd className="font-medium text-gray-900 text-lg">72h</dd>
+									<dd className="font-medium text-gray-900 text-lg dark:text-white">
+										72h
+									</dd>
 								</dl>
 							</div>
 						</div>
 					</div>
 				</div>
 
-				<div className="overflow-hidden rounded-lg bg-white shadow">
+				<div className="overflow-hidden rounded-lg bg-white shadow-sm dark:bg-gray-800">
 					<div className="p-5">
 						<div className="flex items-center">
-							<div className="flex-shrink-0">
+							<div className="shrink-0">
 								<Plus className="h-6 w-6 text-purple-400" />
 							</div>
 							<div className="ml-5 w-0 flex-1">
 								<dl>
-									<dt className="truncate font-medium text-gray-500 text-sm">
+									<dt className="truncate font-medium text-gray-500 text-sm dark:text-gray-400">
 										Active Streak
 									</dt>
-									<dd className="font-medium text-gray-900 text-lg">5 days</dd>
+									<dd className="font-medium text-gray-900 text-lg dark:text-white">
+										5 days
+									</dd>
 								</dl>
 							</div>
 						</div>
@@ -139,13 +147,15 @@ export default async function DashboardPage() {
 
 			{/* Quick Actions */}
 			<section>
-				<h2 className="mb-4 font-medium text-lg">Quick Actions</h2>
+				<h2 className="mb-4 font-medium text-lg dark:text-white">
+					Quick Actions
+				</h2>
 				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
 					{quickActions.map((action) => (
 						<Link
 							key={action.name}
 							href={action.href}
-							className="group relative rounded-lg bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
+							className="group relative rounded-lg bg-white p-6 shadow-xs transition-shadow hover:shadow-md dark:bg-gray-800"
 						>
 							<div>
 								<span
@@ -155,8 +165,10 @@ export default async function DashboardPage() {
 								</span>
 							</div>
 							<div className="mt-4">
-								<h3 className="font-medium text-lg">{action.name}</h3>
-								<p className="mt-2 text-gray-500 text-sm">
+								<h3 className="font-medium text-lg dark:text-white">
+									{action.name}
+								</h3>
+								<p className="mt-2 text-gray-500 text-sm dark:text-gray-400">
 									{action.description}
 								</p>
 							</div>
@@ -173,16 +185,18 @@ export default async function DashboardPage() {
 			{/* Recent Workouts */}
 			<section>
 				<div className="mb-4 flex items-center justify-between">
-					<h2 className="font-medium text-lg">Recent Workouts</h2>
+					<h2 className="font-medium text-lg dark:text-white">
+						Recent Workouts
+					</h2>
 					<Link
 						href="/dashboard/workouts"
-						className="font-medium text-blue-600 text-sm hover:text-blue-500"
+						className="font-medium text-blue-600 text-sm hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
 					>
 						View all
 					</Link>
 				</div>
-				<div className="rounded-lg bg-white shadow">
-					<div className="p-6 text-center text-gray-500">
+				<div className="rounded-lg bg-white shadow-sm dark:bg-gray-800">
+					<div className="p-6 text-center text-gray-500 dark:text-gray-400">
 						No recent workouts. Start your fitness journey today!
 					</div>
 				</div>
