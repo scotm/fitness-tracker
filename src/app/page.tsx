@@ -22,7 +22,7 @@ export default async function Home() {
 				<div className="relative isolate overflow-hidden">
 					<div className="mx-auto max-w-7xl px-6 pt-10 pb-24 sm:pb-32 lg:flex lg:px-8 lg:py-40">
 						<CTASection />
-						<div className="hidden lg:ml-10 lg:block lg:flex-shrink-0">
+						<div className="hidden lg:ml-10 lg:block lg:shrink-0">
 							<Image
 								src={heroImage}
 								alt="Fitness hero"
@@ -64,7 +64,7 @@ export default async function Home() {
 						<div className="mt-10 flex items-center justify-center gap-x-6">
 							<Link
 								href="/auth/register"
-								className="rounded-md bg-white px-3.5 py-2.5 font-semibold text-gray-900 text-sm shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
+								className="rounded-md bg-white px-3.5 py-2.5 font-semibold text-gray-900 text-sm shadow-xs hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
 							>
 								Get started
 							</Link>

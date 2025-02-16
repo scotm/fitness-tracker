@@ -2,7 +2,7 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 export default function CTASection() {
 	return (
-		<div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-xl lg:flex-shrink-0 lg:pt-8">
+		<div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-xl lg:shrink-0 lg:pt-8">
 			<h1 className="mt-10 font-bold text-4xl text-gray-900 tracking-tight sm:text-6xl dark:text-white">
 				Track Your Fitness Journey
 			</h1>
@@ -14,7 +14,7 @@ export default function CTASection() {
 			<div className="mt-10 flex items-center gap-x-8">
 				<Link
 					href="/auth/register"
-					className="rounded-md bg-blue-600 px-3.5 py-2.5 font-semibold text-sm text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600 focus-visible:outline-offset-2"
+					className="rounded-md bg-blue-600 px-3.5 py-2.5 font-semibold text-sm text-white shadow-xs hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600 focus-visible:outline-offset-2"
 				>
 					Get started
 				</Link>

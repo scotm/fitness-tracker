@@ -110,7 +110,7 @@ export default function Example() {
 
 								<PopoverPanel
 									transition
-									className="-left-8 absolute top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5 transition data-[closed]:translate-y-1 data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in dark:bg-gray-800 dark:ring-white/5"
+									className="-left-8 absolute top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5 transition data-closed:translate-y-1 data-closed:opacity-0 data-enter:duration-200 data-leave:duration-150 data-enter:ease-out data-leave:ease-in dark:bg-gray-800 dark:ring-white/5"
 								>
 									<div className="p-4">
 										{products.map((item) => (
@@ -211,7 +211,7 @@ export default function Example() {
 												Product
 												<ChevronDownIcon
 													aria-hidden="true"
-													className="size-5 flex-none group-data-[open]:rotate-180"
+													className="size-5 flex-none group-data-open:rotate-180"
 												/>
 											</DisclosureButton>
 											<DisclosurePanel className="mt-2 space-y-2">
