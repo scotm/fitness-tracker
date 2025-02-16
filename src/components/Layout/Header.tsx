@@ -3,69 +3,69 @@
 import {
 	Dialog,
 	DialogPanel,
-	Disclosure,
-	DisclosureButton,
-	DisclosurePanel,
-	Popover,
-	PopoverButton,
-	PopoverGroup,
-	PopoverPanel,
+	// Disclosure,
+	// DisclosureButton,
+	// DisclosurePanel,
+	// Popover,
+	// PopoverButton,
+	// PopoverGroup,
+	// PopoverPanel,
 } from "@headlessui/react";
+// import {
+// 	ChevronDownIcon,
+// 	PhoneIcon,
+// 	PlayCircleIcon,
+// } from "@heroicons/react/20/solid";
 import {
-	ChevronDownIcon,
-	PhoneIcon,
-	PlayCircleIcon,
-} from "@heroicons/react/20/solid";
-import {
-	ArrowPathIcon,
+	// ArrowPathIcon,
 	Bars3Icon,
-	ChartPieIcon,
-	CursorArrowRaysIcon,
-	FingerPrintIcon,
-	SquaresPlusIcon,
+	// ChartPieIcon,
+	// CursorArrowRaysIcon,
+	// FingerPrintIcon,
+	// SquaresPlusIcon,
 	XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { SessionProvider } from "next-auth/react";
 import { Suspense, useState } from "react";
 import { HeaderAuth } from "./HeaderAuth";
 
-const products = [
-	{
-		name: "Analytics",
-		description: "Get a better understanding of your traffic",
-		href: "#",
-		icon: ChartPieIcon,
-	},
-	{
-		name: "Engagement",
-		description: "Speak directly to your customers",
-		href: "#",
-		icon: CursorArrowRaysIcon,
-	},
-	{
-		name: "Security",
-		description: "Your customers' data will be safe and secure",
-		href: "#",
-		icon: FingerPrintIcon,
-	},
-	{
-		name: "Integrations",
-		description: "Connect with third-party tools",
-		href: "#",
-		icon: SquaresPlusIcon,
-	},
-	{
-		name: "Automations",
-		description: "Build strategic funnels that will convert",
-		href: "#",
-		icon: ArrowPathIcon,
-	},
-];
+// const products = [
+// 	{
+// 		name: "Analytics",
+// 		description: "Get a better understanding of your traffic",
+// 		href: "#",
+// 		icon: ChartPieIcon,
+// 	},
+// 	{
+// 		name: "Engagement",
+// 		description: "Speak directly to your customers",
+// 		href: "#",
+// 		icon: CursorArrowRaysIcon,
+// 	},
+// 	{
+// 		name: "Security",
+// 		description: "Your customers' data will be safe and secure",
+// 		href: "#",
+// 		icon: FingerPrintIcon,
+// 	},
+// 	{
+// 		name: "Integrations",
+// 		description: "Connect with third-party tools",
+// 		href: "#",
+// 		icon: SquaresPlusIcon,
+// 	},
+// 	{
+// 		name: "Automations",
+// 		description: "Build strategic funnels that will convert",
+// 		href: "#",
+// 		icon: ArrowPathIcon,
+// 	},
+// ];
 
-const callsToAction = [
-	{ name: "Watch demo", href: "#", icon: PlayCircleIcon },
-	{ name: "Contact sales", href: "#", icon: PhoneIcon },
-];
+// const callsToAction = [
+// 	{ name: "Watch demo", href: "#", icon: PlayCircleIcon },
+// 	{ name: "Contact sales", href: "#", icon: PhoneIcon },
+// ];
 
 export default function Example() {
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -79,12 +79,12 @@ export default function Example() {
 						className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
 					>
 						<div className="flex lg:flex-1">
-							<a href="#" className="-m-1.5 p-1.5">
-								<span className="sr-only">Your Company</span>
+							<a href="/" className="-m-1.5 p-1.5">
+								<span className="sr-only">Fitness Tracker</span>
 								<img
 									alt=""
 									src="https://tailwindui.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-									className="h-8 w-auto dark:invert"
+									className="h-8 w-auto"
 								/>
 							</a>
 						</div>
@@ -98,7 +98,7 @@ export default function Example() {
 								<Bars3Icon aria-hidden="true" className="size-6" />
 							</button>
 						</div>
-						<PopoverGroup className="hidden lg:flex lg:gap-x-12">
+						{/* <PopoverGroup className="hidden lg:flex lg:gap-x-12">
 							<Popover className="relative">
 								<PopoverButton className="flex items-center gap-x-1 font-semibold text-gray-900 text-sm/6 dark:text-white">
 									Product
@@ -175,7 +175,7 @@ export default function Example() {
 							>
 								Company
 							</a>
-						</PopoverGroup>
+						</PopoverGroup> */}
 						<HeaderAuth />
 					</nav>
 					<Dialog
@@ -187,7 +187,7 @@ export default function Example() {
 						<DialogPanel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10 dark:bg-gray-900 dark:sm:ring-white/10">
 							<div className="flex items-center justify-between">
 								<a href="#" className="-m-1.5 p-1.5">
-									<span className="sr-only">Your Company</span>
+									<span className="sr-only">Fitness Tracker</span>
 									<img
 										alt=""
 										src="https://tailwindui.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
@@ -203,7 +203,7 @@ export default function Example() {
 									<XMarkIcon aria-hidden="true" className="size-6" />
 								</button>
 							</div>
-							<div className="mt-6 flow-root">
+							{/* <div className="mt-6 flow-root">
 								<div className="-my-6 divide-y divide-gray-500/10 dark:divide-white/10">
 									<div className="space-y-2 py-6">
 										<Disclosure as="div" className="-mx-3">
@@ -255,7 +255,7 @@ export default function Example() {
 										</a>
 									</div>
 								</div>
-							</div>
+							</div> */}
 						</DialogPanel>
 					</Dialog>
 				</header>
