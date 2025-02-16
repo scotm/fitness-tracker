@@ -1,8 +1,10 @@
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import type { DefaultSession, NextAuthConfig } from "next-auth";
-import DiscordProvider from "next-auth/providers/discord";
-import GoogleProvider from "next-auth/providers/google";
-import GithubProvider from "next-auth/providers/github";
+import type { PagesOptions } from "@auth/core/types";
+import Discord from "next-auth/providers/discord";
+import Google from "next-auth/providers/google";
+import Github from "next-auth/providers/github";
+import Credentials from "next-auth/providers/credentials";
 
 import { db } from "~/server/db";
 import {
@@ -12,6 +14,9 @@ import {
 	verificationTokens,
 } from "~/server/db/schema";
 import { env } from "~/env";
+import { z } from "zod";
+import { eq } from "drizzle-orm";
+import { compare } from "bcryptjs";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -34,24 +39,65 @@ declare module "next-auth" {
 	// }
 }
 
+export const pages: Partial<PagesOptions> = {
+	// signIn: "/login",
+	// signOut: "/logout",
+	// error: "/error",
+	// verifyRequest: "/verify-request",
+	// newUser: "/onboarding",
+} as const;
+
 /**
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
  *
  * @see https://next-auth.js.org/configuration/options
  */
-export const authConfig = {
+export const authConfig: NextAuthConfig = {
+	pages,
 	providers: [
-		DiscordProvider({
+		Discord({
 			clientId: env.AUTH_DISCORD_ID,
 			clientSecret: env.AUTH_DISCORD_SECRET,
 		}),
-		GoogleProvider({
+		Google({
 			clientId: env.AUTH_GOOGLE_ID,
 			clientSecret: env.AUTH_GOOGLE_SECRET,
 		}),
-		GithubProvider({
+		Github({
 			clientId: env.AUTH_GITHUB_ID,
 			clientSecret: env.AUTH_GITHUB_SECRET,
+		}),
+		Credentials({
+			name: "Credentials",
+			credentials: {
+				email: { label: "Email", type: "email" },
+				password: { label: "Password", type: "password" },
+			},
+			async authorize(credentials) {
+				try {
+					const parsedCredentials = z
+						.object({ email: z.string().email(), password: z.string().min(8) })
+						.parse(credentials);
+					const user = await db.query.users.findFirst({
+						where: eq(users.email, parsedCredentials.email),
+					});
+					// TODO: Potentially redirect to a new user page if the user is not found
+					if (!user) {
+						throw new Error("Invalid credentials.");
+					}
+					const passwordsMatch = await compare(
+						parsedCredentials.password,
+						user.password,
+					);
+					if (passwordsMatch) return user;
+					throw new Error("Invalid credentials.");
+				} catch (error) {
+					console.error("Error authorizing credentials");
+					console.error(credentials);
+					console.error(error);
+					return null;
+				}
+			},
 		}),
 		/**
 		 * ...add more providers here.
@@ -78,4 +124,4 @@ export const authConfig = {
 			},
 		}),
 	},
-} satisfies NextAuthConfig;
+};

@@ -26,6 +26,7 @@ export const users = createTable("user", {
 		.$defaultFn(() => crypto.randomUUID()),
 	name: text("name", { length: 255 }),
 	email: text("email", { length: 255 }).notNull(),
+	password: text("password", { length: 255 }).notNull().default(""),
 	emailVerified: int("email_verified", {
 		mode: "timestamp",
 	}).default(sql`(unixepoch())`),
