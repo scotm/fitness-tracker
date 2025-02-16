@@ -1,18 +1,19 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import {
-	ArrowRight,
-	Calendar,
-	Dumbbell,
-	LineChart,
-	Timer,
-	Trophy,
-} from "lucide-react";
 import Image from "next/image";
 import heroImage from "~/images/conor-tutoring.webp";
 // import { LatestPost } from "~/app/_components/post";
 import { auth } from "~/server/auth";
 import { HydrateClient, api } from "~/trpc/server";
+import { HomepageFeatures } from "~/components/homepage/HomepageFeatures";
+import { ArrowRight } from "lucide-react";
+
+type Feature = {
+	name: string;
+	description: string;
+	image_url: string;
+	icon: React.ElementType;
+};
 
 export default async function Home() {
 	const session = await auth();
@@ -21,55 +22,22 @@ export default async function Home() {
 		redirect("/dashboard");
 	}
 
-	const features = [
-		{
-			name: "Exercise Library",
-			description:
-				"Access a comprehensive database of exercises with detailed instructions and form guides.",
-			icon: Dumbbell,
-		},
-		{
-			name: "Workout Tracking",
-			description:
-				"Log your workouts, track sets, reps, and weights with an intuitive interface.",
-			icon: Calendar,
-		},
-		{
-			name: "Progress Analytics",
-			description:
-				"Visualize your progress with detailed charts and performance metrics.",
-			icon: LineChart,
-		},
-		{
-			name: "Rest Timer",
-			description:
-				"Built-in rest timer to optimize your workout intervals and recovery.",
-			icon: Timer,
-		},
-		{
-			name: "Personal Records",
-			description:
-				"Track and celebrate your personal bests across all exercises.",
-			icon: Trophy,
-		},
-	];
-
 	return (
 		<HydrateClient>
-			<main className="bg-white">
+			<main className="bg-white dark:bg-gray-900">
 				{/* Hero Section */}
 				<div className="relative isolate overflow-hidden">
-					<div className="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-32 lg:flex lg:px-8 lg:py-40">
+					<div className="mx-auto max-w-7xl px-6 pt-10 pb-24 sm:pb-32 lg:flex lg:px-8 lg:py-40">
 						<div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-xl lg:flex-shrink-0 lg:pt-8">
-							<h1 className="mt-10 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+							<h1 className="mt-10 font-bold text-4xl text-gray-900 tracking-tight sm:text-6xl dark:text-white">
 								Track Your Fitness Journey
 							</h1>
-							<p className="mt-6 text-lg leading-8 text-gray-600">
+							<p className="mt-6 text-gray-600 text-lg leading-8 dark:text-gray-400">
 								Take control of your fitness journey with our comprehensive
 								workout tracking platform. Log workouts, track progress, and
 								achieve your fitness goals.
 							</p>
-							<div className="mt-10 flex items-center gap-x-6">
+							<div className="mt-10 flex items-center gap-x-8">
 								<Link
 									href="/auth/register"
 									className="rounded-md bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
@@ -77,17 +45,14 @@ export default async function Home() {
 									Get started
 								</Link>
 								<Link
-									href="/auth/login"
-									className="text-sm font-semibold leading-6 text-gray-900"
+									href="/api/auth/signin"
+									className="flex items-center gap-x-4 font-semibold text-gray-900 text-sm leading-6 dark:text-white"
 								>
-									Log in{" "}
-									<span aria-hidden="true">
-										<ArrowRight />
-									</span>
+									Log in <ArrowRight className="h-4 w-4" />
 								</Link>
 							</div>
 						</div>
-						<div className="hidden lg:block lg:ml-10 lg:flex-shrink-0">
+						<div className="hidden lg:ml-10 lg:block lg:flex-shrink-0">
 							<Image
 								src={heroImage}
 								alt="Fitness hero"
@@ -100,37 +65,20 @@ export default async function Home() {
 				</div>
 
 				{/* Features Section */}
-				<div className="mx-auto max-w-7xl px-6 lg:px-8">
+				<div className="mx-auto max-w-7xl px-6 lg:px-8 border-t border-gray-200 dark:border-gray-800">
 					<div className="mx-auto max-w-2xl lg:text-center">
-						<h2 className="text-base font-semibold leading-7 text-blue-600">
+						<h2 className="text-base font-semibold leading-7 text-blue-600 dark:text-blue-400">
 							Everything you need
 						</h2>
-						<p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+						<p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
 							Powerful features for serious athletes
 						</p>
-						<p className="mt-6 text-lg leading-8 text-gray-600">
+						<p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400">
 							Our comprehensive fitness tracking platform provides all the tools
 							you need to track, analyze, and improve your workouts.
 						</p>
 					</div>
-					<div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
-						<dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3">
-							{features.map((feature) => (
-								<div key={feature.name} className="flex flex-col">
-									<dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
-										<feature.icon
-											className="h-5 w-5 flex-none text-blue-600"
-											aria-hidden="true"
-										/>
-										{feature.name}
-									</dt>
-									<dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600">
-										<p className="flex-auto">{feature.description}</p>
-									</dd>
-								</div>
-							))}
-						</dl>
-					</div>
+					<HomepageFeatures />
 				</div>
 
 				{/* CTA Section */}
@@ -151,7 +99,7 @@ export default async function Home() {
 								Get started
 							</Link>
 							<Link
-								href="/auth/login"
+								href="/api/auth/signin"
 								className="text-sm font-semibold leading-6 text-white"
 							>
 								Log in <span aria-hidden="true">→</span>

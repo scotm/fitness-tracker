@@ -1,8 +1,8 @@
 import "~/styles/globals.css";
 import { Inter } from "next/font/google";
 import { TRPCReactProvider } from "~/trpc/react";
-import { ThemeProvider } from "~/components/theme-provider";
-import { ThemeToggle } from "~/components/theme-toggle";
+import { ThemeProvider } from "~/state/ThemeProvider";
+import { ThemeToggle } from "~/components/ThemeToggle";
 import type { Metadata } from "next";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -26,11 +26,13 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
 	return (
 		<html lang="en" className={`${inter.className}`}>
-			<body className="bg-white dark:bg-gray-900 text-black dark:text-white">
+			<body className="bg-white dark:bg-gray-900 text-black dark:text-white min-h-screen relative">
 				<ThemeProvider>
 					<TRPCReactProvider>
-						<ThemeToggle />
-						{children}
+						<main className="min-h-screen">
+							<ThemeToggle />
+							{children}
+						</main>
 					</TRPCReactProvider>
 				</ThemeProvider>
 			</body>
