@@ -99,13 +99,27 @@ export const verificationTokens = createTable(
 	}),
 );
 
+/**
+ * Exercise table storing basic exercise information
+ * @property {string} id - Unique identifier for the exercise
+ * @property {string} name - Name of the exercise
+ * @property {("Strength"|"Cardio"|"Flexibility"|"Balance"|"Sport")} category - Exercise category
+ * @property {string} description - Optional description of the exercise
+ * @property {("Beginner"|"Intermediate"|"Advanced")} difficulty - Difficulty level of the exercise
+ * @property {string} targetMuscles - Target muscle groups (comma-separated)
+ * @property {number} createdAt - Unix timestamp of creation
+ * @property {number} updatedAt - Unix timestamp of last update
+ */
 export const exercises = createTable("exercises", {
 	id: text("id").primaryKey(),
 	name: text("name").notNull(),
-	category: text("category").notNull(),
+	category: text("category", {
+		enum: ["Strength", "Cardio", "Flexibility", "Balance", "Sport"],
+	}).notNull(),
 	description: text("description"),
-	difficulty: text("difficulty"),
-	targetMuscles: text("target_muscles"),
+	difficulty: text("difficulty", {
+		enum: ["Beginner", "Intermediate", "Advanced"],
+	}).notNull(),
 	createdAt: int("created_at", { mode: "timestamp" })
 		.default(sql`(unixepoch())`)
 		.notNull(),
@@ -114,6 +128,51 @@ export const exercises = createTable("exercises", {
 	),
 });
 
+/**
+ * Equipment table storing available exercise equipment
+ * @property {string} id - Unique identifier for the equipment
+ * @property {string} name - Name of the equipment
+ * @property {string} description - Optional description of the equipment
+ * @property {number} createdAt - Unix timestamp of creation
+ * @property {number} updatedAt - Unix timestamp of last update
+ */
+export const equipment = createTable("equipment", {
+	id: text("id").primaryKey(),
+	name: text("name").notNull(),
+	description: text("description"),
+	createdAt: int("created_at", { mode: "timestamp" })
+		.default(sql`(unixepoch())`)
+		.notNull(),
+	updatedAt: int("updatedAt", { mode: "timestamp" }).$onUpdate(
+		() => new Date(),
+	),
+});
+
+/**
+ * Junction table for the many-to-many relationship between exercises and equipment
+ * @property {string} id - Unique identifier for the relationship
+ * @property {string} exerciseId - Foreign key referencing the exercise
+ * @property {string} equipmentId - Foreign key referencing the equipment
+ */
+export const exerciseEquipment = createTable("exercise_equipment", {
+	id: text("id").primaryKey(),
+	exerciseId: text("exercise_id")
+		.notNull()
+		.references(() => exercises.id),
+	equipmentId: text("equipment_id")
+		.notNull()
+		.references(() => equipment.id),
+});
+
+/**
+ * Workout table storing user workout plans
+ * @property {string} id - Unique identifier for the workout
+ * @property {string} userId - Foreign key referencing the user
+ * @property {string} name - Name of the workout
+ * @property {string} description - Optional description of the workout
+ * @property {number} createdAt - Unix timestamp of creation
+ * @property {number} updatedAt - Unix timestamp of last update
+ */
 export const workouts = createTable("workouts", {
 	id: text("id").primaryKey(),
 	userId: text("user_id")
@@ -129,6 +188,14 @@ export const workouts = createTable("workouts", {
 	),
 });
 
+/**
+ * Junction table for exercises within workouts
+ * @property {string} id - Unique identifier for the workout exercise
+ * @property {string} workoutId - Foreign key referencing the workout
+ * @property {string} exerciseId - Foreign key referencing the exercise
+ * @property {number} order - Order of the exercise within the workout
+ * @property {number} targetSets - Target number of sets to complete
+ */
 export const workoutExercises = createTable("workout_exercises", {
 	id: text("id").primaryKey(),
 	workoutId: text("workout_id")
@@ -137,13 +204,79 @@ export const workoutExercises = createTable("workout_exercises", {
 	exerciseId: text("exercise_id")
 		.notNull()
 		.references(() => exercises.id),
-	sets: int("sets"),
-	reps: int("reps"),
-	weight: real("weight"),
-	duration: int("duration"),
-	order: int("order"),
+	order: int("order").notNull(),
+	targetSets: int("target_sets").notNull(),
 });
 
+/**
+ * Table for individual sets within workout exercises
+ * @property {string} id - Unique identifier for the set
+ * @property {string} workoutExerciseId - Foreign key referencing the workout exercise
+ * @property {number} setNumber - Order/number of the set
+ * @property {number} targetReps - Target number of repetitions
+ * @property {number} targetWeight - Target weight to use
+ * @property {number} targetDuration - Target duration in seconds (for timed exercises)
+ * @property {number} completedReps - Actual completed repetitions
+ * @property {number} completedWeight - Actual weight used
+ * @property {number} completedDuration - Actual duration achieved
+ * @property {boolean} isComplete - Whether the set has been completed
+ */
+export const workoutSets = createTable("workout_sets", {
+	id: text("id").primaryKey(),
+	workoutExerciseId: text("workout_exercise_id")
+		.notNull()
+		.references(() => workoutExercises.id),
+	setNumber: int("set_number").notNull(),
+	targetReps: int("target_reps"),
+	targetWeight: real("target_weight"),
+	targetDuration: int("target_duration"),
+	completedReps: int("completed_reps"),
+	completedWeight: real("completed_weight"),
+	completedDuration: int("completed_duration"),
+	isComplete: int("is_complete", { mode: "boolean" }).default(false).notNull(),
+});
+
+/**
+ * Relations configuration for workout exercises
+ */
+export const workoutExercisesRelations = relations(
+	workoutExercises,
+	({ one, many }) => ({
+		workout: one(workouts, {
+			fields: [workoutExercises.workoutId],
+			references: [workouts.id],
+		}),
+		exercise: one(exercises, {
+			fields: [workoutExercises.exerciseId],
+			references: [exercises.id],
+		}),
+		sets: many(workoutSets),
+	}),
+);
+
+/**
+ * Relations configuration for workout sets
+ */
+export const workoutSetsRelations = relations(workoutSets, ({ one }) => ({
+	workoutExercise: one(workoutExercises, {
+		fields: [workoutSets.workoutExerciseId],
+		references: [workoutExercises.id],
+	}),
+}));
+
+/**
+ * Exercise logs table for tracking completed exercises
+ * @property {string} id - Unique identifier for the log entry
+ * @property {string} userId - Foreign key referencing the user
+ * @property {string} exerciseId - Foreign key referencing the exercise
+ * @property {string} workoutId - Optional foreign key referencing the workout
+ * @property {number} sets - Number of sets completed
+ * @property {number} reps - Number of repetitions per set
+ * @property {number} weight - Weight used (in preferred unit)
+ * @property {number} duration - Duration in seconds (for timed exercises)
+ * @property {string} notes - Optional notes about the exercise session
+ * @property {number} completedAt - Unix timestamp of completion
+ */
 export const exerciseLogs = createTable("exercise_logs", {
 	id: text("id").primaryKey(),
 	userId: text("user_id")
@@ -163,6 +296,15 @@ export const exerciseLogs = createTable("exercise_logs", {
 		.notNull(),
 });
 
+/**
+ * Personal records table for tracking user's best performances
+ * @property {string} id - Unique identifier for the record
+ * @property {string} userId - Foreign key referencing the user
+ * @property {string} exerciseId - Foreign key referencing the exercise
+ * @property {number} value - Record value (weight, reps, or duration)
+ * @property {string} type - Type of record ("weight", "reps", "duration")
+ * @property {number} achievedAt - Unix timestamp when the record was achieved
+ */
 export const personalRecords = createTable("personal_records", {
 	id: text("id").primaryKey(),
 	userId: text("user_id")
@@ -177,3 +319,90 @@ export const personalRecords = createTable("personal_records", {
 		.default(sql`(unixepoch())`)
 		.notNull(),
 });
+
+/**
+ * Muscles table storing available muscle groups
+ * @property {string} id - Unique identifier for the muscle
+ * @property {string} name - Name of the muscle group
+ * @property {string} description - Optional description of the muscle group
+ */
+export const muscles = createTable("muscles", {
+	id: text("id").primaryKey(),
+	name: text("name").notNull(),
+	description: text("description"),
+});
+
+/**
+ * Junction table for the many-to-many relationship between exercises and muscles
+ * @property {string} id - Unique identifier for the relationship
+ * @property {string} exerciseId - Foreign key referencing the exercise
+ * @property {string} muscleId - Foreign key referencing the muscle
+ */
+export const exerciseMuscles = createTable("exercise_muscles", {
+	id: text("id").primaryKey(),
+	exerciseId: text("exercise_id")
+		.notNull()
+		.references(() => exercises.id),
+	muscleId: text("muscle_id")
+		.notNull()
+		.references(() => muscles.id),
+});
+
+/**
+ * Relations configuration for exercises table
+ * Defines the relationship between exercises and their equipment
+ */
+export const exercisesRelations = relations(exercises, ({ many }) => ({
+	equipment: many(exerciseEquipment),
+	muscles: many(exerciseMuscles),
+}));
+
+/**
+ * Relations configuration for equipment table
+ * Defines the relationship between equipment and exercises
+ */
+export const equipmentRelations = relations(equipment, ({ many }) => ({
+	exercises: many(exerciseEquipment),
+}));
+
+/**
+ * Relations configuration for the exercise-equipment junction table
+ * Defines the relationships to both exercises and equipment tables
+ */
+export const exerciseEquipmentRelations = relations(
+	exerciseEquipment,
+	({ one }) => ({
+		exercise: one(exercises, {
+			fields: [exerciseEquipment.exerciseId],
+			references: [exercises.id],
+		}),
+		equipment: one(equipment, {
+			fields: [exerciseEquipment.equipmentId],
+			references: [equipment.id],
+		}),
+	}),
+);
+
+/**
+ * Relations configuration for muscles table
+ */
+export const musclesRelations = relations(muscles, ({ many }) => ({
+	exercises: many(exerciseMuscles),
+}));
+
+/**
+ * Relations configuration for the exercise-muscles junction table
+ */
+export const exerciseMusclesRelations = relations(
+	exerciseMuscles,
+	({ one }) => ({
+		exercise: one(exercises, {
+			fields: [exerciseMuscles.exerciseId],
+			references: [exercises.id],
+		}),
+		muscle: one(muscles, {
+			fields: [exerciseMuscles.muscleId],
+			references: [muscles.id],
+		}),
+	}),
+);
