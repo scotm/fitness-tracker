@@ -20,7 +20,7 @@ export const createTable = sqliteTableCreator(
 );
 
 export const users = createTable("user", {
-	id: text("id", { length: 255 })
+	id: text("id", { length: 36 })
 		.notNull()
 		.primaryKey()
 		.$defaultFn(() => crypto.randomUUID()),
@@ -40,7 +40,7 @@ export const usersRelations = relations(users, ({ many }) => ({
 export const accounts = createTable(
 	"account",
 	{
-		userId: text("user_id", { length: 255 })
+		userId: text("user_id", { length: 36 })
 			.notNull()
 			.references(() => users.id),
 		type: text("type", { length: 255 })
@@ -73,7 +73,7 @@ export const sessions = createTable(
 	"session",
 	{
 		sessionToken: text("session_token", { length: 255 }).notNull().primaryKey(),
-		userId: text("userId", { length: 255 })
+		userId: text("userId", { length: 36 })
 			.notNull()
 			.references(() => users.id),
 		expires: int("expires", { mode: "timestamp" }).notNull(),
@@ -321,15 +321,23 @@ export const personalRecords = createTable("personal_records", {
 });
 
 /**
- * Muscles table storing available muscle groups
+ * Muscle table storing muscle groups
  * @property {string} id - Unique identifier for the muscle
  * @property {string} name - Name of the muscle group
  * @property {string} description - Optional description of the muscle group
+ * @property {number} createdAt - Unix timestamp of creation
+ * @property {number} updatedAt - Unix timestamp of last update
  */
 export const muscles = createTable("muscles", {
 	id: text("id").primaryKey(),
 	name: text("name").notNull(),
 	description: text("description"),
+	createdAt: int("created_at", { mode: "timestamp" })
+		.default(sql`(unixepoch())`)
+		.notNull(),
+	updatedAt: int("updatedAt", { mode: "timestamp" }).$onUpdate(
+		() => new Date(),
+	),
 });
 
 /**
@@ -337,6 +345,7 @@ export const muscles = createTable("muscles", {
  * @property {string} id - Unique identifier for the relationship
  * @property {string} exerciseId - Foreign key referencing the exercise
  * @property {string} muscleId - Foreign key referencing the muscle
+ * @property {("Primary"|"Secondary")} role - Whether this muscle is primary or secondary for the exercise
  */
 export const exerciseMuscles = createTable("exercise_muscles", {
 	id: text("id").primaryKey(),
@@ -346,6 +355,9 @@ export const exerciseMuscles = createTable("exercise_muscles", {
 	muscleId: text("muscle_id")
 		.notNull()
 		.references(() => muscles.id),
+	role: text("role", {
+		enum: ["Primary", "Secondary"],
+	}).notNull(),
 });
 
 /**
