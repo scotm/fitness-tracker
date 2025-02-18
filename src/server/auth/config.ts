@@ -74,29 +74,22 @@ export const authConfig: NextAuthConfig = {
 				password: { label: "Password", type: "password" },
 			},
 			async authorize(credentials) {
-				try {
-					const parsedCredentials = z
-						.object({ email: z.string().email(), password: z.string().min(8) })
-						.parse(credentials);
-					const user = await db.query.users.findFirst({
-						where: eq(users.email, parsedCredentials.email),
-					});
-					// TODO: Potentially redirect to a new user page if the user is not found
-					if (!user) {
-						throw new Error("Invalid credentials.");
-					}
-					const passwordsMatch = await compare(
-						parsedCredentials.password,
-						user.password,
-					);
-					if (passwordsMatch) return user;
+				const parsedCredentials = z
+					.object({ email: z.string().email(), password: z.string().min(8) })
+					.parse(credentials);
+				const user = await db.query.users.findFirst({
+					where: eq(users.email, parsedCredentials.email),
+				});
+				// TODO: Potentially redirect to a new user page if the user is not found
+				if (!user) {
 					throw new Error("Invalid credentials.");
-				} catch (error) {
-					console.error("Error authorizing credentials");
-					console.error(credentials);
-					console.error(error);
-					return null;
 				}
+				const passwordsMatch = await compare(
+					parsedCredentials.password,
+					user.password,
+				);
+				if (passwordsMatch) return user;
+				return null;
 			},
 		}),
 		/**

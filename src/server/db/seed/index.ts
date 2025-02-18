@@ -5,6 +5,7 @@ import {
 	exerciseEquipment,
 	muscles,
 	exerciseMuscles,
+	users,
 } from "../schema";
 import {
 	exerciseData,
@@ -12,7 +13,9 @@ import {
 	muscleData,
 	exerciseEquipmentRelations,
 	exerciseMuscleRelations,
+	defaultUser,
 } from "./data";
+import { hash } from "bcryptjs";
 
 export async function seed() {
 	console.log("🌱 Starting database seeding...");
@@ -24,17 +27,26 @@ export async function seed() {
 		await db.delete(exercises);
 		await db.delete(equipment);
 		await db.delete(muscles);
+		await db.delete(users);
 
 		console.log("Cleared existing data");
+
+		// Create default user
+		const hashedPassword = await hash(defaultUser.password, 10);
+		await db.insert(users).values({
+			name: defaultUser.name,
+			email: defaultUser.email,
+			password: hashedPassword,
+		});
+
+		console.log("Created default user");
 
 		// Insert exercises
 		const insertedExercises = await Promise.all(
 			exerciseData.map(async (exercise) => {
-				const id = crypto.randomUUID();
 				return db
 					.insert(exercises)
 					.values({
-						id,
 						name: exercise.name,
 						category: exercise.category,
 						description: exercise.description,
@@ -51,11 +63,9 @@ export async function seed() {
 		// Insert equipment
 		const insertedEquipment = await Promise.all(
 			equipmentData.map(async (item) => {
-				const id = crypto.randomUUID();
 				return db
 					.insert(equipment)
 					.values({
-						id,
 						name: item.name,
 						description: item.description,
 					})
@@ -69,11 +79,9 @@ export async function seed() {
 		// Insert muscles
 		const insertedMuscles = await Promise.all(
 			muscleData.map(async (muscle) => {
-				const id = crypto.randomUUID();
 				return db
 					.insert(muscles)
 					.values({
-						id,
 						name: muscle.name,
 						description: muscle.description,
 					})
@@ -98,7 +106,6 @@ export async function seed() {
 				if (!equipmentItem) continue;
 
 				await db.insert(exerciseEquipment).values({
-					id: crypto.randomUUID(),
 					exerciseId: exercise.id,
 					equipmentId: equipmentItem.id,
 				});
@@ -119,7 +126,6 @@ export async function seed() {
 				if (!muscle) continue;
 
 				await db.insert(exerciseMuscles).values({
-					id: crypto.randomUUID(),
 					exerciseId: exercise.id,
 					muscleId: muscle.id,
 					role: muscleInfo.role,

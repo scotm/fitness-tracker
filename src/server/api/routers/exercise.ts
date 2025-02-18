@@ -58,9 +58,13 @@ export const exerciseRouter = createTRPCRouter({
 				where: eq(exercises.id, input.id),
 			});
 		}),
+
 	update: protectedProcedure
 		.input(exerciseInsertSchema)
 		.mutation(async ({ ctx, input }) => {
+			if (!input.id) {
+				throw new Error("Exercise ID is required");
+			}
 			await ctx.db
 				.update(exercises)
 				.set(input)

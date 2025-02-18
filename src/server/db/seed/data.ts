@@ -165,3 +165,10 @@ export const exerciseMuscleRelations: {
 		],
 	},
 ];
+
+export const defaultUser = {
+	name: "Demo User",
+	email: "demo@example.com",
+	// Note: Password will be hashed in the seed function
+	password: "password123",
+};

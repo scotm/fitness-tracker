@@ -111,7 +111,10 @@ export const verificationTokens = createTable(
  * @property {number} updatedAt - Unix timestamp of last update
  */
 export const exercises = createTable("exercises", {
-	id: text("id").primaryKey(),
+	id: text("id", { length: 36 })
+		.notNull()
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
 	name: text("name").notNull(),
 	category: text("category", {
 		enum: ["Strength", "Cardio", "Flexibility", "Balance", "Sport"],
@@ -138,7 +141,10 @@ export const exercises = createTable("exercises", {
  * @property {number} updatedAt - Unix timestamp of last update
  */
 export const equipment = createTable("equipment", {
-	id: text("id").primaryKey(),
+	id: text("id", { length: 36 })
+		.notNull()
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
 	name: text("name").notNull(),
 	description: text("description"),
 	createdAt: int("created_at", { mode: "timestamp" })
@@ -156,7 +162,10 @@ export const equipment = createTable("equipment", {
  * @property {string} equipmentId - Foreign key referencing the equipment
  */
 export const exerciseEquipment = createTable("exercise_equipment", {
-	id: text("id").primaryKey(),
+	id: text("id", { length: 36 })
+		.notNull()
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
 	exerciseId: text("exercise_id")
 		.notNull()
 		.references(() => exercises.id),
@@ -175,7 +184,10 @@ export const exerciseEquipment = createTable("exercise_equipment", {
  * @property {number} updatedAt - Unix timestamp of last update
  */
 export const workouts = createTable("workouts", {
-	id: text("id").primaryKey(),
+	id: text("id", { length: 36 })
+		.notNull()
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
 	userId: text("user_id")
 		.notNull()
 		.references(() => users.id),
@@ -198,7 +210,10 @@ export const workouts = createTable("workouts", {
  * @property {number} targetSets - Target number of sets to complete
  */
 export const workoutExercises = createTable("workout_exercises", {
-	id: text("id").primaryKey(),
+	id: text("id", { length: 36 })
+		.notNull()
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
 	workoutId: text("workout_id")
 		.notNull()
 		.references(() => workouts.id),
@@ -223,7 +238,10 @@ export const workoutExercises = createTable("workout_exercises", {
  * @property {boolean} isComplete - Whether the set has been completed
  */
 export const workoutSets = createTable("workout_sets", {
-	id: text("id").primaryKey(),
+	id: text("id", { length: 36 })
+		.notNull()
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
 	workoutExerciseId: text("workout_exercise_id")
 		.notNull()
 		.references(() => workoutExercises.id),
@@ -279,7 +297,10 @@ export const workoutSetsRelations = relations(workoutSets, ({ one }) => ({
  * @property {number} completedAt - Unix timestamp of completion
  */
 export const exerciseLogs = createTable("exercise_logs", {
-	id: text("id").primaryKey(),
+	id: text("id", { length: 36 })
+		.notNull()
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
 	userId: text("user_id")
 		.notNull()
 		.references(() => users.id),
@@ -307,7 +328,10 @@ export const exerciseLogs = createTable("exercise_logs", {
  * @property {number} achievedAt - Unix timestamp when the record was achieved
  */
 export const personalRecords = createTable("personal_records", {
-	id: text("id").primaryKey(),
+	id: text("id", { length: 36 })
+		.notNull()
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
 	userId: text("user_id")
 		.notNull()
 		.references(() => users.id),
@@ -330,7 +354,10 @@ export const personalRecords = createTable("personal_records", {
  * @property {number} updatedAt - Unix timestamp of last update
  */
 export const muscles = createTable("muscles", {
-	id: text("id").primaryKey(),
+	id: text("id", { length: 36 })
+		.notNull()
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
 	name: text("name").notNull(),
 	description: text("description"),
 	createdAt: int("created_at", { mode: "timestamp" })
@@ -349,7 +376,10 @@ export const muscles = createTable("muscles", {
  * @property {("Primary"|"Secondary")} role - Whether this muscle is primary or secondary for the exercise
  */
 export const exerciseMuscles = createTable("exercise_muscles", {
-	id: text("id").primaryKey(),
+	id: text("id", { length: 36 })
+		.notNull()
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
 	exerciseId: text("exercise_id")
 		.notNull()
 		.references(() => exercises.id),
