@@ -104,7 +104,7 @@ export const verificationTokens = createTable(
  * @property {string} id - Unique identifier for the exercise
  * @property {string} name - Name of the exercise
  * @property {("Strength"|"Cardio"|"Flexibility"|"Balance"|"Sport")} category - Exercise category
- * @property {string} description - Optional description of the exercise
+ * @property {string} description - Description of the exercise
  * @property {("Beginner"|"Intermediate"|"Advanced")} difficulty - Difficulty level of the exercise
  * @property {string} targetMuscles - Target muscle groups (comma-separated)
  * @property {number} createdAt - Unix timestamp of creation
@@ -116,7 +116,8 @@ export const exercises = createTable("exercises", {
 	category: text("category", {
 		enum: ["Strength", "Cardio", "Flexibility", "Balance", "Sport"],
 	}).notNull(),
-	description: text("description"),
+	description: text("description").notNull(),
+	how_to_perform: text("how_to_perform").notNull(),
 	difficulty: text("difficulty", {
 		enum: ["Beginner", "Intermediate", "Advanced"],
 	}).notNull(),

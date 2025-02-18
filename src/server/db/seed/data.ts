@@ -6,6 +6,8 @@ export const exerciseData: Omit<ExerciseInsert, "id">[] = [
 		category: "Strength",
 		description:
 			"A classic bodyweight exercise that targets the chest, shoulders, and triceps",
+		how_to_perform:
+			"1. Start in a plank position with your hands slightly wider than shoulder-width apart.\n2. Lower your body by bending your elbows, creating a 90-degree angle at your elbows.\n3. Push through your palms to straighten your elbows and return to the starting position.\n4. Repeat for the desired number of reps.",
 		difficulty: "Beginner",
 	},
 	{
@@ -13,6 +15,8 @@ export const exerciseData: Omit<ExerciseInsert, "id">[] = [
 		category: "Strength",
 		description:
 			"An upper body exercise that primarily targets the back and biceps",
+		how_to_perform:
+			"1. Hang from a pull-up bar with your hands slightly wider than shoulder-width apart.\n2. Pull yourself up until your chin is over the bar.\n3. Lower yourself back down to the starting position.\n4. Repeat for the desired number of reps.",
 		difficulty: "Intermediate",
 	},
 	{
@@ -20,6 +24,8 @@ export const exerciseData: Omit<ExerciseInsert, "id">[] = [
 		category: "Strength",
 		description:
 			"A lower body compound exercise that targets the quadriceps, hamstrings, and glutes",
+		how_to_perform:
+			"1. Stand with your feet shoulder-width apart and your toes slightly turned out.\n2. Lower your body by bending your knees and pushing your hips back, as if sitting into a chair.\n3. Keep your back straight and your core engaged.\n4. Push through your heels to return to the starting position.\n5. Repeat for the desired number of reps.",
 		difficulty: "Beginner",
 	},
 	{
@@ -27,6 +33,8 @@ export const exerciseData: Omit<ExerciseInsert, "id">[] = [
 		category: "Cardio",
 		description:
 			"A fundamental cardio exercise that improves endurance and cardiovascular health",
+		how_to_perform:
+			"1. Start by standing with your feet shoulder-width apart and your toes slightly turned out.\n2. Push through your heels to return to the starting position.\n3. Repeat for the desired number of reps.",
 		difficulty: "Beginner",
 	},
 	{
@@ -34,6 +42,8 @@ export const exerciseData: Omit<ExerciseInsert, "id">[] = [
 		category: "Flexibility",
 		description:
 			"A series of poses that improve flexibility, balance, and mind-body connection",
+		how_to_perform:
+			"1. Start by standing with your feet shoulder-width apart and your toes slightly turned out.\n2. Push through your heels to return to the starting position.\n3. Repeat for the desired number of reps.",
 		difficulty: "Beginner",
 	},
 ];

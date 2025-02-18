@@ -10,6 +10,7 @@
 import { TRPCError, initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
+import { env } from "~/env";
 
 import { auth } from "~/server/auth";
 import { db } from "~/server/db";
@@ -121,6 +122,14 @@ export const publicProcedure = t.procedure.use(timingMiddleware);
 export const protectedProcedure = t.procedure
 	.use(timingMiddleware)
 	.use(({ ctx, next }) => {
+		if (!env.AUTH_REQUIRED) {
+			console.debug("AUTH_REQUIRED is false, skipping authentication");
+			return next({
+				ctx: {
+					session: null,
+				},
+			});
+		}
 		if (!ctx.session || !ctx.session.user) {
 			throw new TRPCError({ code: "UNAUTHORIZED" });
 		}

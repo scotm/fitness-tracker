@@ -7,6 +7,7 @@ export const env = createEnv({
 	 * isn't built with invalid env vars.
 	 */
 	server: {
+		AUTH_REQUIRED: z.boolean().default(true),
 		AUTH_SECRET:
 			process.env.NODE_ENV === "production"
 				? z.string()
@@ -37,6 +38,7 @@ export const env = createEnv({
 	 * middlewares) or client-side so we need to destruct manually.
 	 */
 	runtimeEnv: {
+		AUTH_REQUIRED: process.env.AUTH_REQUIRED,
 		AUTH_SECRET: process.env.AUTH_SECRET,
 		AUTH_DISCORD_ID: process.env.AUTH_DISCORD_ID,
 		AUTH_DISCORD_SECRET: process.env.AUTH_DISCORD_SECRET,

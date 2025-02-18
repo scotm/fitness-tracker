@@ -38,6 +38,7 @@ export async function seed() {
 						name: exercise.name,
 						category: exercise.category,
 						description: exercise.description,
+						how_to_perform: exercise.how_to_perform,
 						difficulty: exercise.difficulty,
 					})
 					.returning()

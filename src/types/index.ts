@@ -1,4 +1,4 @@
-import type {
+import {
 	accounts,
 	exerciseEquipment,
 	exerciseLogs,
@@ -13,35 +13,42 @@ import type {
 	workouts,
 } from "../server/db/schema";
 
-export type Exercise = {
-	id: string;
-	name: string;
-	category: "Strength" | "Cardio" | "Flexibility" | "Balance" | "Sport";
-	description?: string;
-	difficulty: "Beginner" | "Intermediate" | "Advanced";
-	createdAt: number;
-	updatedAt?: number;
-};
+import { createSelectSchema, createInsertSchema } from "drizzle-zod";
 
-export type Equipment = {
-	id: string;
-	name: string;
-	description?: string;
-	createdAt: number;
-	updatedAt?: number;
-};
+export const exerciseSchema = createSelectSchema(exercises);
+export const exerciseInsertSchema = createInsertSchema(exercises);
+export const equipmentSchema = createSelectSchema(equipment);
+export const equipmentInsertSchema = createInsertSchema(equipment);
+export const muscleSchema = createSelectSchema(muscles);
+export const muscleInsertSchema = createInsertSchema(muscles);
+export const workoutSchema = createSelectSchema(workouts);
+export const workoutInsertSchema = createInsertSchema(workouts);
+export const workoutExerciseSchema = createSelectSchema(workoutExercises);
+export const workoutExerciseInsertSchema = createInsertSchema(workoutExercises);
+export const workoutSetSchema = createSelectSchema(workoutSets);
+export const workoutSetInsertSchema = createInsertSchema(workoutSets);
+export const exerciseLogSchema = createSelectSchema(exerciseLogs);
+export const exerciseLogInsertSchema = createInsertSchema(exerciseLogs);
+export const personalRecordSchema = createSelectSchema(personalRecords);
+export const personalRecordInsertSchema = createInsertSchema(personalRecords);
+export const exerciseEquipmentSchema = createSelectSchema(exerciseEquipment);
+export const exerciseEquipmentInsertSchema =
+	createInsertSchema(exerciseEquipment);
+export const exerciseMuscleSchema = createSelectSchema(exerciseMuscles);
+export const exerciseMuscleInsertSchema = createInsertSchema(exerciseMuscles);
+export const accountSchema = createSelectSchema(accounts);
+export const accountInsertSchema = createInsertSchema(accounts);
+export const userSchema = createSelectSchema(users);
+export const userInsertSchema = createInsertSchema(users);
 
-export type Muscle = {
-	id: string;
-	name: string;
-	description?: string;
-	createdAt: number;
-	updatedAt?: number;
-};
+export type Exercise = typeof exercises.$inferSelect;
+export type ExerciseInsert = typeof exercises.$inferInsert;
 
-export type ExerciseInsert = Omit<Exercise, "createdAt" | "updatedAt">;
-export type EquipmentInsert = Omit<Equipment, "createdAt" | "updatedAt">;
-export type MuscleInsert = Omit<Muscle, "createdAt" | "updatedAt">;
+export type Equipment = typeof equipment.$inferSelect;
+export type EquipmentInsert = typeof equipment.$inferInsert;
+
+export type Muscle = typeof muscles.$inferSelect;
+export type MuscleInsert = typeof muscles.$inferInsert;
 
 export type ExerciseEquipment = typeof exerciseEquipment.$inferSelect;
 export type ExerciseEquipmentInsert = typeof exerciseEquipment.$inferInsert;
