@@ -128,7 +128,6 @@ export async function seed() {
 				await db.insert(exerciseMuscles).values({
 					exerciseId: exercise.id,
 					muscleId: muscle.id,
-					role: muscleInfo.role,
 				});
 			}
 		}

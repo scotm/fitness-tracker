@@ -64,7 +64,7 @@ export default async function Home() {
 						<div className="mt-10 flex items-center justify-center gap-x-6">
 							<Link
 								href="/auth/register"
-								className="rounded-md bg-white px-3.5 py-2.5 font-semibold text-gray-900 text-sm shadow-xs hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
+								className="rounded-md bg-white px-3.5 py-2.5 font-semibold text-gray-900 text-sm shadow-xs hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
 							>
 								Get started
 							</Link>

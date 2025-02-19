@@ -7,21 +7,51 @@ import {
 	publicProcedure,
 } from "~/server/api/trpc";
 
-import { exercises } from "~/server/db/schema";
+import {
+	exerciseEquipment,
+	exerciseMuscles,
+	exercises,
+} from "~/server/db/schema";
 import { exerciseInsertSchema } from "~/types";
+
+const exerciseInsertSchemaWithEquipment = exerciseInsertSchema.extend({
+	equipment: z.array(z.string()),
+	muscles: z.array(z.string()),
+});
 
 export const exerciseRouter = createTRPCRouter({
 	create: protectedProcedure
-		.input(exerciseInsertSchema)
+		.input(exerciseInsertSchemaWithEquipment)
 		.mutation(async ({ ctx, input }) => {
-			await ctx.db.insert(exercises).values({
-				id: crypto.randomUUID(),
-				name: input.name,
-				category: input.category,
-				description: input.description,
-				how_to_perform: input.how_to_perform,
-				difficulty: input.difficulty,
-			});
+			const exercise = await ctx.db
+				.insert(exercises)
+				.values({
+					id: crypto.randomUUID(),
+					name: input.name,
+					category: input.category,
+					description: input.description,
+					how_to_perform: input.how_to_perform,
+					difficulty: input.difficulty,
+				})
+				.returning();
+			if (!exercise || exercise.length === 0 || !exercise[0]) {
+				throw new Error("Unable to create exercise");
+			}
+			for (const equipment of input.equipment) {
+				await ctx.db.insert(exerciseEquipment).values({
+					id: crypto.randomUUID(),
+					exerciseId: exercise[0].id,
+					equipmentId: equipment,
+				});
+			}
+			for (const muscle of input.muscles) {
+				await ctx.db.insert(exerciseMuscles).values({
+					id: crypto.randomUUID(),
+					exerciseId: exercise[0].id,
+					muscleId: muscle,
+				});
+			}
+			return exercise[0].id;
 		}),
 
 	getAll: publicProcedure
@@ -56,7 +86,12 @@ export const exerciseRouter = createTRPCRouter({
 		.query(async ({ ctx, input }) => {
 			const exercise = await ctx.db.query.exercises.findFirst({
 				where: eq(exercises.id, input.id),
+				with: {
+					equipment: true,
+					muscles: true,
+				},
 			});
+			return exercise;
 		}),
 
 	update: protectedProcedure

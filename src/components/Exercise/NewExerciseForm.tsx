@@ -1,18 +1,13 @@
 "use client";
+import { api } from "~/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
-import {
-	type Control,
-	type FieldPath,
-	type FieldValues,
-	useController,
-	useForm,
-} from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { createExercise } from "~/app/dashboard/exercise/new/action";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+// import { createExercise } from "~/app/dashboard/exercise/new/action";
 import { type Equipment, exerciseInsertSchema, type Muscle } from "~/types";
 import { Checkboxes } from "../forms/Checkboxes";
-// import type { ExtractKeysOfStringArray } from "~/types/utils";
 
 const exerciseInsertSchemaWithEquipment = exerciseInsertSchema.extend({
 	equipment: z.array(z.string()),
@@ -20,8 +15,6 @@ const exerciseInsertSchemaWithEquipment = exerciseInsertSchema.extend({
 });
 
 type FormData = z.infer<typeof exerciseInsertSchemaWithEquipment>;
-
-// type EquipmentKeyNames = ExtractKeysOfStringArray<FormData>;
 
 // infer these from the exercise schema
 const difficultyOptions = exerciseInsertSchema.shape.difficulty.options;
@@ -31,6 +24,22 @@ export default function NewExerciseForm({
 	equipmentAvailable,
 	musclesAvailable,
 }: { equipmentAvailable: Equipment[]; musclesAvailable: Muscle[] }) {
+	const utils = api.useUtils();
+	const router = useRouter();
+	const createExercise = api.exercise.create.useMutation({
+		onSuccess: async (exerciseId) => {
+			await utils.exercise.invalidate();
+			toast.success("Exercise created successfully");
+
+			// TODO: Redirect to the exercise details page
+			router.push(`/dashboard/exercise/${exerciseId}`);
+		},
+		onError: (error) => {
+			console.error(error);
+			toast.error("Error creating exercise");
+		},
+	});
+
 	const form = useForm<FormData>({
 		resolver: zodResolver(exerciseInsertSchemaWithEquipment),
 		defaultValues: {
@@ -46,7 +55,10 @@ export default function NewExerciseForm({
 	});
 	return (
 		<form
-			onSubmit={form.handleSubmit(createExercise)}
+			onSubmit={form.handleSubmit(async (data) => {
+				await createExercise.mutateAsync(data);
+				form.reset();
+			})}
 			className="flex flex-col gap-4"
 		>
 			<div className="flex flex-col gap-2">
@@ -110,8 +122,12 @@ export default function NewExerciseForm({
 				control={form.control}
 				name="muscles"
 			/>
-			<button className="rounded-md bg-blue-500 p-2 text-white" type="submit">
-				Create
+			<button
+				className="rounded-md bg-blue-500 p-2 text-white"
+				type="submit"
+				disabled={createExercise.isPending}
+			>
+				{createExercise.isPending ? "Creating..." : "Create"}
 			</button>
 		</form>
 	);

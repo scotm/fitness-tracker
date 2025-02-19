@@ -386,9 +386,9 @@ export const exerciseMuscles = createTable("exercise_muscles", {
 	muscleId: text("muscle_id")
 		.notNull()
 		.references(() => muscles.id),
-	role: text("role", {
-		enum: ["Primary", "Secondary"],
-	}).notNull(),
+	// role: text("role", {
+	// 	enum: ["Primary", "Secondary"],
+	// }).default(null),
 });
 
 /**
