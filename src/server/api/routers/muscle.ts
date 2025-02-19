@@ -22,10 +22,10 @@ export const muscleRouter = createTRPCRouter({
 		}),
 
 	getAll: publicProcedure.query(async ({ ctx }) => {
-		const equipment = await ctx.db.query.equipment.findMany({
-			orderBy: (equipment, { asc }) => [asc(equipment.name)],
+		const muscles = await ctx.db.query.muscles.findMany({
+			orderBy: (muscle, { asc }) => [asc(muscle.name)],
 		});
-		return equipment;
+		return muscles;
 	}),
 
 	// getById: publicProcedure
