@@ -56,18 +56,29 @@ export const exerciseRouter = createTRPCRouter({
 
 	getAll: publicProcedure
 		.input(
-			z.object({
-				take: z.number().optional().default(10),
-				skip: z.number().optional().default(0),
-				orderBy: z.enum(["createdAt", "name"]).optional().default("createdAt"),
-			}),
+			z
+				.object({
+					take: z.number().optional().default(10),
+					skip: z.number().optional().default(0),
+					orderBy: z
+						.enum(["createdAt", "name"])
+						.optional()
+						.default("createdAt"),
+				})
+				.optional(),
 		)
 		.query(async ({ ctx, input }) => {
+			if (!input) {
+				const exercises = await ctx.db.query.exercises.findMany({
+					orderBy: (exercises, { desc }) => [desc(exercises.createdAt)],
+				});
+				return exercises;
+			}
 			const exercises = await ctx.db.query.exercises.findMany({
-				limit: input.take,
-				offset: input.skip,
+				limit: input?.take,
+				offset: input?.skip,
 				orderBy: (exercises, { desc }) => [
-					desc(exercises[input.orderBy as keyof typeof exercises]),
+					desc(exercises[input?.orderBy as keyof typeof exercises]),
 				],
 			});
 			return exercises;
