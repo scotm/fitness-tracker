@@ -11,6 +11,7 @@ import {
 import { z } from "zod";
 import { createExercise } from "~/app/dashboard/exercise/new/action";
 import { type Equipment, exerciseInsertSchema, type Muscle } from "~/types";
+import { Checkboxes } from "../forms/Checkboxes";
 // import type { ExtractKeysOfStringArray } from "~/types/utils";
 
 const exerciseInsertSchemaWithEquipment = exerciseInsertSchema.extend({
@@ -25,73 +26,6 @@ type FormData = z.infer<typeof exerciseInsertSchemaWithEquipment>;
 // infer these from the exercise schema
 const difficultyOptions = exerciseInsertSchema.shape.difficulty.options;
 const categoryOptions = exerciseInsertSchema.shape.category.options;
-
-const capitalize = (s: string) => {
-	if (!s || s.length === 0 || s[0] === undefined) return "";
-	return s[0].toUpperCase() + s.slice(1);
-};
-
-function Checkboxes<
-	T extends { id: string; name: string },
-	U extends FieldValues,
->({
-	options,
-	control,
-	name,
-}: {
-	options: T[];
-	control: Control<U>;
-	name: FieldPath<U>;
-}) {
-	const fieldname = capitalize(name);
-	const { field } = useController({
-		control,
-		name,
-	});
-
-	if (!Array.isArray(field.value)) {
-		throw new Error("Value must be an array");
-	}
-
-	const [value, setValue] = useState<string[]>(field.value);
-
-	return (
-		<div className="flex flex-col gap-2 rounded-md border-2 border-gray-300 p-2 dark:border-gray-600">
-			<div>
-				<h4 className="font-bold text-lg">{fieldname}</h4>
-			</div>
-			<div className="grid grid-cols-2 gap-2 lg:grid-cols-3 xl:grid-cols-4">
-				{options.map((option, index) => (
-					<div key={option.id}>
-						<input
-							onChange={(e) => {
-								let valueCopy = [...value];
-
-								if (e.target.checked) {
-									valueCopy.push(option.id);
-								} else {
-									valueCopy = valueCopy.filter((id) => id !== option.id);
-								}
-
-								// send data to react hook form
-								field.onChange(valueCopy);
-
-								// update local state
-								setValue(valueCopy);
-							}}
-							type="checkbox"
-							name={`${name}.${index}`}
-							checked={value.includes(option.id)}
-							value={option.id}
-							className="mr-2"
-						/>
-						<label htmlFor={option.id}>{option.name}</label>
-					</div>
-				))}
-			</div>
-		</div>
-	);
-}
 
 export default function NewExerciseForm({
 	equipmentAvailable,
@@ -165,11 +99,13 @@ export default function NewExerciseForm({
 				</select>
 			</div>
 			<Checkboxes
+				groupName="Equipment"
 				options={equipmentAvailable}
 				control={form.control}
 				name="equipment"
 			/>
 			<Checkboxes
+				groupName="Muscles"
 				options={musclesAvailable}
 				control={form.control}
 				name="muscles"
