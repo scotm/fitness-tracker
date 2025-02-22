@@ -122,14 +122,14 @@ export const publicProcedure = t.procedure.use(timingMiddleware);
 export const protectedProcedure = t.procedure
 	.use(timingMiddleware)
 	.use(({ ctx, next }) => {
-		if (!env.AUTH_REQUIRED) {
-			console.debug("AUTH_REQUIRED is false, skipping authentication");
-			return next({
-				ctx: {
-					session: null,
-				},
-			});
-		}
+		// if (!env.AUTH_REQUIRED) {
+		// 	console.debug("AUTH_REQUIRED is false, skipping authentication");
+		// 	return next({
+		// 		ctx: {
+		// 			session: null,
+		// 		},
+		// 	});
+		// }
 		if (!ctx.session || !ctx.session.user) {
 			throw new TRPCError({ code: "UNAUTHORIZED" });
 		}

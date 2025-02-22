@@ -18,6 +18,7 @@ export const muscleRouter = createTRPCRouter({
 				id: crypto.randomUUID(),
 				name: input.name,
 				description: input.description,
+				is_front: input.is_front,
 			});
 		}),
 

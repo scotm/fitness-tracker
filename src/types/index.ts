@@ -11,6 +11,7 @@ import {
 	workoutExercises,
 	workoutSets,
 	workouts,
+	workoutPlans,
 } from "../server/db/schema";
 
 import { createSelectSchema, createInsertSchema } from "drizzle-zod";
@@ -27,6 +28,8 @@ export const workoutExerciseSchema = createSelectSchema(workoutExercises);
 export const workoutExerciseInsertSchema = createInsertSchema(workoutExercises);
 export const workoutSetSchema = createSelectSchema(workoutSets);
 export const workoutSetInsertSchema = createInsertSchema(workoutSets);
+export const workoutPlanSchema = createSelectSchema(workoutPlans);
+export const workoutPlanInsertSchema = createInsertSchema(workoutPlans);
 export const exerciseLogSchema = createSelectSchema(exerciseLogs);
 export const exerciseLogInsertSchema = createInsertSchema(exerciseLogs);
 export const personalRecordSchema = createSelectSchema(personalRecords);

@@ -57,12 +57,12 @@ export const accounts = createTable(
 		id_token: text("id_token"),
 		session_state: text("session_state", { length: 255 }),
 	},
-	(account) => ({
-		compoundKey: primaryKey({
+	(account) => ([
+		primaryKey({
 			columns: [account.provider, account.providerAccountId],
 		}),
-		userIdIdx: index("account_user_id_idx").on(account.userId),
-	}),
+		index("account_user_id_idx").on(account.userId),
+	]),
 );
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
@@ -78,9 +78,9 @@ export const sessions = createTable(
 			.references(() => users.id),
 		expires: int("expires", { mode: "timestamp" }).notNull(),
 	},
-	(session) => ({
-		userIdIdx: index("session_userId_idx").on(session.userId),
-	}),
+	(session) => ([
+		index("session_userId_idx").on(session.userId),
+	]),
 );
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({
@@ -94,9 +94,7 @@ export const verificationTokens = createTable(
 		token: text("token", { length: 255 }).notNull(),
 		expires: int("expires", { mode: "timestamp" }).notNull(),
 	},
-	(vt) => ({
-		compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
-	}),
+	(vt) => ([primaryKey({ columns: [vt.identifier, vt.token] })]),
 );
 
 /**
@@ -256,6 +254,66 @@ export const workoutSets = createTable("workout_sets", {
 });
 
 /**
+ * Workout Plan table storing template workout plans
+ * @property {string} id - Unique identifier for the workout plan
+ * @property {string} name - Name of the workout plan
+ * @property {string} description - Description of the workout plan
+ * @property {("Beginner"|"Intermediate"|"Advanced")} difficulty - Difficulty level of the plan
+ * @property {number} estimatedDuration - Estimated duration in minutes
+ * @property {number} createdAt - Unix timestamp of creation
+ * @property {number} updatedAt - Unix timestamp of last update
+ */
+export const workoutPlans = createTable("workout_plans", {
+	id: text("id", { length: 36 })
+		.notNull()
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
+	userId: text("user_id")
+		.references(() => users.id),
+	name: text("name").notNull(),
+	description: text("description").notNull(),
+	difficulty: text("difficulty", {
+		enum: ["Beginner", "Intermediate", "Advanced"],
+	}).notNull(),
+	estimatedDuration: int("estimated_duration").notNull(),
+	createdAt: int("created_at", { mode: "timestamp" })
+		.default(sql`(unixepoch())`)
+		.notNull(),
+	updatedAt: int("updatedAt", { mode: "timestamp" }).$onUpdate(
+		() => new Date(),
+	),
+});
+
+/**
+ * Junction table for exercises within workout plans
+ * @property {string} id - Unique identifier for the workout plan exercise
+ * @property {string} workoutPlanId - Foreign key referencing the workout plan
+ * @property {string} exerciseId - Foreign key referencing the exercise
+ * @property {number} order - Order of the exercise within the plan
+ * @property {number} targetSets - Target number of sets (for strength exercises)
+ * @property {number} targetReps - Target number of reps per set (for strength exercises)
+ * @property {number} targetDuration - Target duration in seconds (for cardio/timed exercises)
+ * @property {string} notes - Additional notes or instructions
+ */
+export const workoutPlanExercises = createTable("workout_plan_exercises", {
+	id: text("id", { length: 36 })
+		.notNull()
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
+	workoutPlanId: text("workout_plan_id")
+		.notNull()
+		.references(() => workoutPlans.id),
+	exerciseId: text("exercise_id")
+		.notNull()
+		.references(() => exercises.id),
+	order: int("order").notNull(),
+	targetSets: int("target_sets"),
+	targetReps: int("target_reps"),
+	targetDuration: int("target_duration"),
+	notes: text("notes"),
+});
+
+/**
  * Relations configuration for workout exercises
  */
 export const workoutExercisesRelations = relations(
@@ -282,6 +340,30 @@ export const workoutSetsRelations = relations(workoutSets, ({ one }) => ({
 		references: [workoutExercises.id],
 	}),
 }));
+
+/**
+ * Relations configuration for workout plans
+ */
+export const workoutPlansRelations = relations(workoutPlans, ({ many }) => ({
+	exercises: many(workoutPlanExercises),
+}));
+
+/**
+ * Relations configuration for workout plan exercises
+ */
+export const workoutPlanExercisesRelations = relations(
+	workoutPlanExercises,
+	({ one }) => ({
+		workoutPlan: one(workoutPlans, {
+			fields: [workoutPlanExercises.workoutPlanId],
+			references: [workoutPlans.id],
+		}),
+		exercise: one(exercises, {
+			fields: [workoutPlanExercises.exerciseId],
+			references: [exercises.id],
+		}),
+	}),
+);
 
 /**
  * Exercise logs table for tracking completed exercises

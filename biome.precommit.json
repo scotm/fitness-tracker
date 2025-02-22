@@ -33,6 +33,9 @@
 				"noUnsafeDeclarationMerging": "error",
 				"useAwait": "off",
 				"useNamespaceKeyword": "error"
+			},
+			"nursery": {
+				"useSortedClasses": "error"
 			}
 		}
 	},

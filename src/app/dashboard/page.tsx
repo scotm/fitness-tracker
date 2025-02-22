@@ -1,10 +1,12 @@
 // import ExercisesSection from "@/components/ExercisesSection";
 // import { getCurrentUser } from "@/lib/auth/session";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { QuickActions } from "~/components/dashboard/QuickActions";
 import { QuickStats } from "~/components/dashboard/QuickStats";
 import { RecentWorkouts } from "~/components/dashboard/RecentWorkouts";
+import { Button } from "~/components/ui/button";
 import { auth } from "~/server/auth";
 
 export const metadata: Metadata = {
@@ -33,6 +35,14 @@ export default async function DashboardPage() {
 			</header>
 
 			{/* Quick Stats */}
+			<Link href="/dashboard/workouts">
+				<button className="bg-blue-500 font-bold hover:bg-blue-700 px-4 py-2 rounded text-white">
+					Go to Workouts
+				</button>
+			</Link>
+			<Link href="/dashboard/workouts">
+				<Button>Go to Workouts</Button>
+			</Link>
 			<QuickStats />
 
 			{/* Quick Actions */}
