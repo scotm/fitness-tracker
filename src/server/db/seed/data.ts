@@ -1,6 +1,6 @@
 import type { ExerciseInsert, EquipmentInsert, MuscleInsert } from "~/types";
 
-export const exerciseData: Omit<ExerciseInsert, "id">[] = [
+export const exerciseData: ExerciseInsert[] = [
 	{
 		name: "Push-ups",
 		category: "Strength",
@@ -34,7 +34,7 @@ export const exerciseData: Omit<ExerciseInsert, "id">[] = [
 		description:
 			"A fundamental cardio exercise that improves endurance and cardiovascular health",
 		how_to_perform:
-			"1. Start by standing with your feet shoulder-width apart and your toes slightly turned out.\n2. Push through your heels to return to the starting position.\n3. Repeat for the desired number of reps.",
+			"1. Run on a treadmill or outside\n2. Choose a comfortable pace and duration",
 		difficulty: "Beginner",
 	},
 	{
@@ -48,13 +48,25 @@ export const exerciseData: Omit<ExerciseInsert, "id">[] = [
 	},
 ];
 
-export const equipmentData: Omit<EquipmentInsert, "id">[] = [
+export const equipmentData: EquipmentInsert[] = [
+	{
+		name: "None",
+		description: "Requires no equipment",
+	},
 	{
 		name: "Dumbbells",
 		description: "Free weights used for resistance training",
 	},
 	{
-		name: "Yoga Mat",
+		name: "Barbell",
+		description: "A long bar and weights used for resistance training",
+	},
+	{
+		name: "SZ-Bar",
+		description: "A short bar and weights with a curved centre",
+	},
+	{
+		name: "Gym Mat",
 		description: "A non-slip mat for floor exercises and yoga",
 	},
 	{
@@ -69,47 +81,98 @@ export const equipmentData: Omit<EquipmentInsert, "id">[] = [
 		name: "Jump Rope",
 		description: "A rope used for cardio and coordination exercises",
 	},
+	{
+		name: "Swiss Ball",
+		description: "A ball used for stability and balance exercises",
+	},
+	{
+		name: "Kettlebell",
+		description: "A weight used for strength training and rehabilitation",
+	},
+	{
+		name: "Bench",
+		description: "A flat surface used for strength training and rehabilitation",
+	},
 ];
 
-export const muscleData: Omit<MuscleInsert, "id">[] = [
+export const muscleData: MuscleInsert[] = [
 	{
 		name: "Chest (Pectoralis)",
 		description:
 			"The large muscles of the chest, responsible for pushing movements",
+		is_front: true,
 	},
 	{
 		name: "Back (Latissimus Dorsi)",
 		description:
 			"The large muscles of the back, responsible for pulling movements",
+		is_front: false,
 	},
 	{
 		name: "Shoulders (Deltoids)",
 		description: "The three-headed shoulder muscles that control arm movement",
+		is_front: true,
 	},
 	{
 		name: "Biceps",
 		description: "The front of the upper arm, responsible for elbow flexion",
+		is_front: true,
 	},
 	{
 		name: "Triceps",
 		description: "The back of the upper arm, responsible for elbow extension",
+		is_front: false,
 	},
 	{
 		name: "Quadriceps",
 		description: "The front thigh muscles, responsible for leg extension",
+		is_front: true,
 	},
 	{
 		name: "Hamstrings",
 		description: "The back thigh muscles, responsible for leg flexion",
+		is_front: false,
 	},
 	{
 		name: "Glutes",
 		description: "The buttocks muscles, responsible for hip extension",
+		is_front: false,
+	},
+	{
+		name: "Trapezius",
+		is_front: false,
+	},
+	{
+		name: "Soleus",
+		description: "The lower leg muscles, responsible for plantar flexion",
+		is_front: false,
+	},
+	{
+		name: "Brachialis",
+		description: "The front of the upper arm, responsible for elbow flexion",
+		is_front: true,
+	},
+	{
+		name: "Abs",
+		description: "The abdominal muscles, responsible for core stability",
+		is_front: true,
+	},
+	{
+		name: "Erector spinae",
+		description: "The back muscles, responsible for spine stability",
+		is_front: false,
+	},
+	{
+		name: "Obliques",
+		description:
+			"The side abdominal muscles, responsible for twisting movements",
+		is_front: true,
 	},
 	{
 		name: "Core",
 		description:
 			"The abdominal and lower back muscles that stabilize the spine",
+		is_front: true,
 	},
 ];
 
@@ -120,7 +183,7 @@ export const exerciseEquipmentRelations: {
 }[] = [
 	{
 		exerciseName: "Push-ups",
-		equipmentNames: ["Yoga Mat"],
+		equipmentNames: ["Gym Mat"],
 	},
 	{
 		exerciseName: "Pull-ups",
@@ -128,7 +191,7 @@ export const exerciseEquipmentRelations: {
 	},
 	{
 		exerciseName: "Yoga Flow",
-		equipmentNames: ["Yoga Mat"],
+		equipmentNames: ["Gym Mat"],
 	},
 ];
 

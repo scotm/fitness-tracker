@@ -84,6 +84,7 @@ export async function seed() {
 					.values({
 						name: muscle.name,
 						description: muscle.description,
+						is_front: muscle.is_front,
 					})
 					.returning()
 					.get();

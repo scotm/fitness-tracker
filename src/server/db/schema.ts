@@ -360,6 +360,7 @@ export const muscles = createTable("muscles", {
 		.$defaultFn(() => crypto.randomUUID()),
 	name: text("name").notNull(),
 	description: text("description"),
+	is_front: int("is_front", { mode: "boolean" }).notNull(),
 	createdAt: int("created_at", { mode: "timestamp" })
 		.default(sql`(unixepoch())`)
 		.notNull(),
@@ -386,9 +387,9 @@ export const exerciseMuscles = createTable("exercise_muscles", {
 	muscleId: text("muscle_id")
 		.notNull()
 		.references(() => muscles.id),
-	// role: text("role", {
-	// 	enum: ["Primary", "Secondary"],
-	// }).default(null),
+	role: text("role", {
+		enum: ["Primary", "Secondary"],
+	}).default("Primary"),
 });
 
 /**
