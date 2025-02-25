@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Trophy, History, Plus, Timer } from "lucide-react";
+import { Trophy, History, Plus, Timer, Dumbbell } from "lucide-react";
 
 export const QuickActions = () => {
 	const quickActions = [
@@ -10,6 +10,13 @@ export const QuickActions = () => {
 			href: "/dashboard/workouts/new",
 			icon: Plus,
 			color: "bg-blue-500",
+		},
+		{
+			name: "Workout Planner",
+			description: "Create custom workout routines",
+			href: "/workout-planner",
+			icon: Dumbbell,
+			color: "bg-indigo-500",
 		},
 		{
 			name: "View History",
