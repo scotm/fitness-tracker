@@ -14,6 +14,7 @@ import {
 	exerciseEquipmentRelations,
 	exerciseMuscleRelations,
 	defaultUser,
+	testUser,
 } from "./data";
 import { hash } from "bcryptjs";
 
@@ -40,6 +41,16 @@ export async function seed() {
 		});
 
 		console.log("Created default user");
+
+		// Create test user
+		const hashedTestPassword = await hash(testUser.password, 10);
+		await db.insert(users).values({
+			name: testUser.name,
+			email: testUser.email,
+			password: hashedTestPassword,
+		});
+
+		console.log("Created test user");
 
 		// Insert exercises
 		const insertedExercises = await Promise.all(
@@ -134,6 +145,7 @@ export async function seed() {
 		}
 
 		console.log("Created exercise-muscle relationships");
+
 		console.log("✅ Seeding completed successfully");
 	} catch (error) {
 		console.error("❌ Error seeding database:", error);

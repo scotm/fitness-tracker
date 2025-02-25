@@ -47,26 +47,33 @@ export const pages: Partial<PagesOptions> = {
 	// newUser: "/onboarding",
 } as const;
 
-/**
- * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
- *
- * @see https://next-auth.js.org/configuration/options
- */
-export const authConfig: NextAuthConfig = {
-	pages,
-	providers: [
-		Discord({
-			clientId: env.AUTH_DISCORD_ID,
-			clientSecret: env.AUTH_DISCORD_SECRET,
-		}),
-		Google({
-			clientId: env.AUTH_GOOGLE_ID,
-			clientSecret: env.AUTH_GOOGLE_SECRET,
-		}),
-		Github({
-			clientId: env.AUTH_GITHUB_ID,
-			clientSecret: env.AUTH_GITHUB_SECRET,
-		}),
+// biome-ignore lint/suspicious/noExplicitAny: Providers are ambiguously typed
+const providers: any[] = [
+	Discord({
+		clientId: env.AUTH_DISCORD_ID,
+		clientSecret: env.AUTH_DISCORD_SECRET,
+	}),
+	Google({
+		clientId: env.AUTH_GOOGLE_ID,
+		clientSecret: env.AUTH_GOOGLE_SECRET,
+	}),
+	Github({
+		clientId: env.AUTH_GITHUB_ID,
+		clientSecret: env.AUTH_GITHUB_SECRET,
+	}),
+	/**
+	 * ...add more providers here.
+	 *
+	 * Most other providers require a bit more work than the Discord provider. For example, the
+	 * GitHub provider requires you to add the `refresh_token_expires_in` field to the Account
+	 * model. Refer to the NextAuth.js docs for the provider you want to use. Example:
+	 *
+	 * @see https://next-auth.js.org/providers/github
+	 */
+];
+
+if (process.env.NODE_ENV === "development") {
+	providers.push(
 		Credentials({
 			name: "Credentials",
 			credentials: {
@@ -92,16 +99,17 @@ export const authConfig: NextAuthConfig = {
 				return null;
 			},
 		}),
-		/**
-		 * ...add more providers here.
-		 *
-		 * Most other providers require a bit more work than the Discord provider. For example, the
-		 * GitHub provider requires you to add the `refresh_token_expires_in` field to the Account
-		 * model. Refer to the NextAuth.js docs for the provider you want to use. Example:
-		 *
-		 * @see https://next-auth.js.org/providers/github
-		 */
-	],
+	);
+}
+
+/**
+ * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
+ *
+ * @see https://next-auth.js.org/configuration/options
+ */
+export const authConfig: NextAuthConfig = {
+	pages,
+	providers,
 	adapter: DrizzleAdapter(db, {
 		usersTable: users,
 		accountsTable: accounts,
