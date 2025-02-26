@@ -1,5 +1,5 @@
-import { Metadata } from "next";
-import WorkoutPlannerContainer from "@/components/WorkoutPlanner/WorkoutPlannerContainer";
+import type { Metadata } from "next";
+import WorkoutPlannerContainer from "~/components/WorkoutPlanner/WorkoutPlannerContainer";
 
 export const metadata: Metadata = {
 	title: "Workout Planner",
