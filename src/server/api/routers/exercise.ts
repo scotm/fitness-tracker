@@ -68,20 +68,42 @@ export const exerciseRouter = createTRPCRouter({
 				.optional(),
 		)
 		.query(async ({ ctx, input }) => {
-			if (!input) {
-				const exercises = await ctx.db.query.exercises.findMany({
-					orderBy: (exercises, { desc }) => [desc(exercises.createdAt)],
-				});
-				return exercises;
-			}
+			const { take, skip, orderBy } = input ?? {};
+
 			const exercises = await ctx.db.query.exercises.findMany({
-				limit: input?.take,
-				offset: input?.skip,
+				limit: input ? take : undefined,
+				offset: input ? skip : undefined,
 				orderBy: (exercises, { desc }) => [
-					desc(exercises[input?.orderBy as keyof typeof exercises]),
+					desc(
+						input
+							? exercises[orderBy as keyof typeof exercises]
+							: exercises.createdAt,
+					),
 				],
+				with: {
+					muscles: {
+						with: {
+							muscle: true,
+						},
+					},
+					equipment: {
+						with: {
+							equipment: true,
+						},
+					},
+				},
 			});
-			return exercises;
+
+			const exercisesOutput = exercises.map((exercise) => {
+				return {
+					...exercise,
+					muscles: exercise.muscles.map((muscle) => muscle.muscle.name),
+					equipment: exercise.equipment.map(
+						(equipment) => equipment.equipment.name,
+					),
+				};
+			});
+			return exercisesOutput;
 		}),
 
 	getLatest: publicProcedure.query(async ({ ctx }) => {
