@@ -16,14 +16,7 @@ import {
 import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
 import { ScrollArea } from "~/components/ui/scroll-area";
-import {
-	Plus,
-	Search,
-	ArrowRight,
-	Calendar,
-	Clock,
-	Dumbbell,
-} from "lucide-react";
+import { Plus, ArrowRight, Calendar, Clock, Dumbbell } from "lucide-react";
 import type { WorkoutTemplate } from "./WorkoutPlannerContainer";
 
 interface WorkoutTemplatesProps {
