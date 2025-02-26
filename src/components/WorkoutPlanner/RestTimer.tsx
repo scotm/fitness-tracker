@@ -14,18 +14,20 @@ import {
 	Volume2,
 	VolumeX,
 } from "lucide-react";
+import type { IntervalRef } from "~/types/utils";
 
 export default function RestTimer() {
 	const [time, setTime] = useState(60); // Default 60 seconds
-	const [customTime, setCustomTime] = useState(60);
+	const [startingTime, setStartingTime] = useState(60);
+	const [hasWarned, setHasWarned] = useState(false);
 	const [isRunning, setIsRunning] = useState(false);
 	const [isMuted, setIsMuted] = useState(false);
-	const intervalRef = useRef<NodeJS.Timeout | null>(null);
+	const intervalRef = useRef<IntervalRef>(undefined);
 	const audioRef = useRef<HTMLAudioElement | null>(null);
 
 	// Initialize audio
 	useEffect(() => {
-		audioRef.current = new Audio("/timer-end.mp3");
+		audioRef.current = new Audio("/sounds/timer-end.ogg");
 		return () => {
 			if (intervalRef.current) {
 				clearInterval(intervalRef.current);
@@ -38,14 +40,25 @@ export default function RestTimer() {
 		if (isRunning) {
 			intervalRef.current = setInterval(() => {
 				setTime((prevTime) => {
+					if (startingTime > 30 && prevTime === 10) {
+						if (!hasWarned) {
+							navigator.vibrate(500);
+							setHasWarned(true);
+						}
+					}
 					if (prevTime <= 1) {
-						clearInterval(intervalRef.current as NodeJS.Timeout);
+						clearInterval(intervalRef.current);
 						setIsRunning(false);
 						if (!isMuted && audioRef.current) {
 							audioRef.current
 								.play()
 								.catch((err) => console.error("Failed to play sound:", err));
 						}
+						if (navigator.vibrate) {
+							// Vibrate for 500 milliseconds
+							navigator.vibrate(500);
+						}
+						setHasWarned(false);
 						return 0;
 					}
 					return prevTime - 1;
@@ -74,7 +87,7 @@ export default function RestTimer() {
 	const pauseTimer = () => setIsRunning(false);
 	const resetTimer = () => {
 		setIsRunning(false);
-		setTime(customTime);
+		setTime(startingTime);
 	};
 
 	// Preset times
@@ -83,7 +96,7 @@ export default function RestTimer() {
 	// Update timer with custom value
 	const handleCustomTimeChange = (value: number) => {
 		if (!isRunning) {
-			setCustomTime(value);
+			setStartingTime(value);
 			setTime(value);
 		}
 	};
@@ -115,7 +128,7 @@ export default function RestTimer() {
 					<Label htmlFor="timer-slider">Set Timer Duration</Label>
 					<Slider
 						id="timer-slider"
-						value={[customTime]}
+						value={[startingTime]}
 						onValueChange={handleSliderChange}
 						min={5}
 						max={300}
@@ -133,7 +146,7 @@ export default function RestTimer() {
 						type="number"
 						min={5}
 						max={300}
-						value={customTime}
+						value={startingTime}
 						onChange={(e) => handleCustomTimeChange(Number(e.target.value))}
 						disabled={isRunning}
 						className="w-20"

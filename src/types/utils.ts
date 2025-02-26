@@ -5,3 +5,5 @@ export type RemoveUndefinedFromUnion<T> = T extends undefined ? never : T;
 export type ExtractKeysOfStringArray<T> = RemoveUndefinedFromUnion<
 	ExtractKeysOfValueType<T, string[]>
 >;
+
+export type IntervalRef = ReturnType<typeof setInterval> | undefined;
