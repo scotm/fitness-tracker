@@ -9,7 +9,7 @@ import {
 	CardHeader,
 	CardTitle,
 	CardContent,
-	CardFooter,
+	// CardFooter,
 } from "~/components/ui/card";
 import {
 	Select,
@@ -19,84 +19,50 @@ import {
 	SelectValue,
 } from "~/components/ui/select";
 import { Badge } from "~/components/ui/badge";
-import type { Exercise } from "./WorkoutPlannerContainer";
+import type { inferProcedureOutput } from "@trpc/server";
+import type { AppRouter } from "~/server/api/root";
+import { api } from "~/trpc/react";
+
+type Exercise = inferProcedureOutput<AppRouter["exercise"]["getAll"]>[number];
 
 interface ExerciseSearchProps {
 	onAddExercise: (exercise: Exercise) => void;
 }
 
-// Mock data for now - will be replaced with API call
-const MOCK_EXERCISES: Exercise[] = [
-	{
-		id: "ex1",
-		name: "Barbell Bench Press",
-		category: "Strength",
-		description: "Compound exercise for chest development",
-		difficulty: "Intermediate",
-		targetMuscles: "Chest, Triceps, Shoulders",
-		equipment: ["Barbell", "Bench"],
-	},
-	{
-		id: "ex2",
-		name: "Pull-ups",
-		category: "Strength",
-		description: "Upper body compound movement",
-		difficulty: "Intermediate",
-		targetMuscles: "Back, Biceps",
-		equipment: ["Pull-up Bar"],
-	},
-	{
-		id: "ex3",
-		name: "Squats",
-		category: "Strength",
-		description: "Lower body compound exercise",
-		difficulty: "Intermediate",
-		targetMuscles: "Quadriceps, Hamstrings, Glutes",
-		equipment: ["Barbell", "Squat Rack"],
-	},
-	{
-		id: "ex4",
-		name: "Plank",
-		category: "Strength",
-		description: "Core stability exercise",
-		difficulty: "Beginner",
-		targetMuscles: "Core, Shoulders",
-		equipment: [],
-	},
-	{
-		id: "ex5",
-		name: "Bicycle Crunches",
-		category: "Strength",
-		description: "Dynamic core exercise",
-		difficulty: "Beginner",
-		targetMuscles: "Abs, Obliques",
-		equipment: [],
-	},
-];
-
 export default function ExerciseSearch({ onAddExercise }: ExerciseSearchProps) {
 	const [searchTerm, setSearchTerm] = useState("");
-	const [selectedCategory, setSelectedCategory] = useState<string>("");
-	const [selectedDifficulty, setSelectedDifficulty] = useState<string>("");
-	const [filteredExercises, setFilteredExercises] =
-		useState<Exercise[]>(MOCK_EXERCISES);
+	const [selectedCategory, setSelectedCategory] = useState<string>("all");
+	const [selectedDifficulty, setSelectedDifficulty] = useState<string>("all");
+	const [exercises] = api.exercise.getAll.useSuspenseQuery(undefined);
+	const [filteredExercises, setFilteredExercises] = useState<Exercise[]>(
+		exercises ?? [],
+	);
+	const categories = [
+		...new Set(exercises.map((exercise) => exercise.category)),
+	].toSorted();
+	const difficulties = [
+		...new Set(exercises.map((exercise) => exercise.difficulty)),
+	].toSorted();
 
 	// Filter exercises based on search term and filters
 	useEffect(() => {
-		const filtered = MOCK_EXERCISES.filter((exercise) => {
+		if (!exercises) return;
+		const filtered = exercises.filter((exercise) => {
 			const matchesSearch =
 				exercise.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
 				exercise.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-				exercise.targetMuscles
-					?.toLowerCase()
-					.includes(searchTerm.toLowerCase());
+				exercise.muscles.some((muscle) =>
+					muscle.toLowerCase().includes(searchTerm.toLowerCase()),
+				);
 
-			const matchesCategory = selectedCategory
-				? exercise.category === selectedCategory
-				: true;
-			const matchesDifficulty = selectedDifficulty
-				? exercise.difficulty === selectedDifficulty
-				: true;
+			const matchesCategory =
+				selectedCategory === "all"
+					? true
+					: exercise.category === selectedCategory;
+			const matchesDifficulty =
+				selectedDifficulty === "all"
+					? true
+					: exercise.difficulty === selectedDifficulty;
 
 			return matchesSearch && matchesCategory && matchesDifficulty;
 		});
@@ -132,12 +98,12 @@ export default function ExerciseSearch({ onAddExercise }: ExerciseSearchProps) {
 							<SelectValue placeholder="Category" />
 						</SelectTrigger>
 						<SelectContent>
-							<SelectItem value="">All Categories</SelectItem>
-							<SelectItem value="Strength">Strength</SelectItem>
-							<SelectItem value="Cardio">Cardio</SelectItem>
-							<SelectItem value="Flexibility">Flexibility</SelectItem>
-							<SelectItem value="Balance">Balance</SelectItem>
-							<SelectItem value="Sport">Sport</SelectItem>
+							<SelectItem value="all">All Categories</SelectItem>
+							{categories.map((category) => (
+								<SelectItem key={category} value={category}>
+									{category}
+								</SelectItem>
+							))}
 						</SelectContent>
 					</Select>
 
@@ -149,10 +115,12 @@ export default function ExerciseSearch({ onAddExercise }: ExerciseSearchProps) {
 							<SelectValue placeholder="Difficulty" />
 						</SelectTrigger>
 						<SelectContent>
-							<SelectItem value="">All Difficulties</SelectItem>
-							<SelectItem value="Beginner">Beginner</SelectItem>
-							<SelectItem value="Intermediate">Intermediate</SelectItem>
-							<SelectItem value="Advanced">Advanced</SelectItem>
+							<SelectItem value="all">All Difficulties</SelectItem>
+							{difficulties.map((difficulty) => (
+								<SelectItem key={difficulty} value={difficulty}>
+									{difficulty}
+								</SelectItem>
+							))}
 						</SelectContent>
 					</Select>
 				</div>
