@@ -53,8 +53,15 @@ export async function seed() {
 		console.log("Created test user");
 
 		// Insert exercises
+		console.log("Inserting exercises");
+		// remove duplicates
+		const uniqueExerciseData = exerciseData.filter(
+			(exercise, index, self) =>
+				index === self.findIndex((t) => t.name === exercise.name),
+		);
+		console.log("Unique exercises", uniqueExerciseData.length);
 		const insertedExercises = await Promise.all(
-			exerciseData.map(async (exercise) => {
+			uniqueExerciseData.map(async (exercise) => {
 				return db
 					.insert(exercises)
 					.values({
@@ -105,7 +112,18 @@ export async function seed() {
 		console.log(`Inserted ${insertedMuscles.length} muscles`);
 
 		// Create exercise-equipment relationships
-		for (const relation of exerciseEquipmentRelations) {
+		console.log("Creating exercise-equipment relationships");
+		// remove duplicates
+		const uniqueExerciseEquipmentRelations = exerciseEquipmentRelations.filter(
+			(relation, index, self) =>
+				index ===
+				self.findIndex((t) => t.exerciseName === relation.exerciseName),
+		);
+		console.log(
+			"Unique exercise-equipment relations",
+			uniqueExerciseEquipmentRelations.length,
+		);
+		for (const relation of uniqueExerciseEquipmentRelations) {
 			const exercise = insertedExercises.find(
 				(e) => e.name === relation.exerciseName,
 			);
@@ -127,7 +145,18 @@ export async function seed() {
 		console.log("Created exercise-equipment relationships");
 
 		// Create exercise-muscle relationships
-		for (const relation of exerciseMuscleRelations) {
+		console.log("Creating exercise-muscle relationships");
+		// remove duplicates
+		const uniqueExerciseMuscleRelations = exerciseMuscleRelations.filter(
+			(relation, index, self) =>
+				index ===
+				self.findIndex((t) => t.exerciseName === relation.exerciseName),
+		);
+		console.log(
+			"Unique exercise-muscle relations",
+			uniqueExerciseMuscleRelations.length,
+		);
+		for (const relation of uniqueExerciseMuscleRelations) {
 			const exercise = insertedExercises.find(
 				(e) => e.name === relation.exerciseName,
 			);
@@ -137,10 +166,17 @@ export async function seed() {
 				const muscle = insertedMuscles.find((m) => m.name === muscleInfo.name);
 				if (!muscle) continue;
 
-				await db.insert(exerciseMuscles).values({
-					exerciseId: exercise.id,
-					muscleId: muscle.id,
-				});
+				try {
+					await db.insert(exerciseMuscles).values({
+						exerciseId: exercise.id,
+						muscleId: muscle.id,
+					});
+				} catch (error) {
+					console.error(
+						`Error inserting exercise-muscle relationship for ${exercise.name} and ${muscle.name}:`,
+						error,
+					);
+				}
 			}
 		}
 

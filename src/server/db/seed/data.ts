@@ -140,10 +140,17 @@ export function generateMuscleRelations(): {
 				const exerciseData = JSON.parse(fileContent);
 
 				if (exerciseData.muscles_used && exerciseData.muscles_used.length > 0) {
-					relations.push({
+					const payload = {
 						exerciseName: exerciseData.name,
 						muscles: mapMuscleNames(exerciseData.muscles_used),
-					});
+					};
+					const uniqueMuscles = new Set(
+						payload.muscles.map((muscle) => muscle.name),
+					);
+					if (uniqueMuscles.size !== payload.muscles.length) {
+						payload.muscles = [...payload.muscles];
+					}
+					relations.push(payload);
 				}
 			} catch (error) {
 				console.error(
@@ -225,7 +232,6 @@ function mapMuscleNames(
 	return muscleList.map((muscle) => {
 		const lowerMuscle = muscle.toLowerCase();
 		const mappedName = muscleMap[lowerMuscle] || muscle;
-
 		// Assign all as Primary for simplicity
 		return { name: mappedName, role: "Primary" };
 	});
@@ -398,58 +404,13 @@ export const muscleData: MuscleInsert[] = [
 export const exerciseEquipmentRelations: {
 	exerciseName: string;
 	equipmentNames: string[];
-}[] = [
-	{
-		exerciseName: "Push-ups",
-		equipmentNames: ["Gym Mat"],
-	},
-	{
-		exerciseName: "Pull-ups",
-		equipmentNames: ["Pull-up Bar"],
-	},
-	{
-		exerciseName: "Yoga Flow",
-		equipmentNames: ["Gym Mat"],
-	},
-	// Add fixture equipment relations
-	...fixtureEquipmentRelations,
-];
+}[] = [...fixtureEquipmentRelations];
 
 // Define exercise-muscle relationships
 export const exerciseMuscleRelations: {
 	exerciseName: string;
 	muscles: { name: string; role: "Primary" | "Secondary" }[];
-}[] = [
-	{
-		exerciseName: "Push-ups",
-		muscles: [
-			{ name: "Chest (Pectoralis)", role: "Primary" },
-			{ name: "Shoulders (Deltoids)", role: "Primary" },
-			{ name: "Triceps", role: "Primary" },
-			{ name: "Core", role: "Secondary" },
-		],
-	},
-	{
-		exerciseName: "Pull-ups",
-		muscles: [
-			{ name: "Back (Latissimus Dorsi)", role: "Primary" },
-			{ name: "Biceps", role: "Primary" },
-			{ name: "Shoulders (Deltoids)", role: "Secondary" },
-			{ name: "Core", role: "Secondary" },
-		],
-	},
-	{
-		exerciseName: "Squats",
-		muscles: [
-			{ name: "Quadriceps", role: "Primary" },
-			{ name: "Hamstrings", role: "Primary" },
-			{ name: "Glutes", role: "Primary" },
-			{ name: "Core", role: "Secondary" },
-		],
-	},
-	// Add fixture muscle relations
-	...fixtureMuscleRelations,
-];
+}[] = [...fixtureMuscleRelations];
 
 export const defaultUser = {
 	name: "Demo User",

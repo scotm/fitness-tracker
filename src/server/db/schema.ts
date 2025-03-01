@@ -6,6 +6,7 @@ import {
 	real,
 	sqliteTableCreator,
 	text,
+	uniqueIndex,
 } from "drizzle-orm/sqlite-core";
 import type { AdapterAccount } from "next-auth/adapters";
 
@@ -57,12 +58,12 @@ export const accounts = createTable(
 		id_token: text("id_token"),
 		session_state: text("session_state", { length: 255 }),
 	},
-	(account) => ([
+	(account) => [
 		primaryKey({
 			columns: [account.provider, account.providerAccountId],
 		}),
 		index("account_user_id_idx").on(account.userId),
-	]),
+	],
 );
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
@@ -78,9 +79,7 @@ export const sessions = createTable(
 			.references(() => users.id),
 		expires: int("expires", { mode: "timestamp" }).notNull(),
 	},
-	(session) => ([
-		index("session_userId_idx").on(session.userId),
-	]),
+	(session) => [index("session_userId_idx").on(session.userId)],
 );
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({
@@ -94,7 +93,7 @@ export const verificationTokens = createTable(
 		token: text("token", { length: 255 }).notNull(),
 		expires: int("expires", { mode: "timestamp" }).notNull(),
 	},
-	(vt) => ([primaryKey({ columns: [vt.identifier, vt.token] })]),
+	(vt) => [primaryKey({ columns: [vt.identifier, vt.token] })],
 );
 
 /**
@@ -108,27 +107,31 @@ export const verificationTokens = createTable(
  * @property {number} createdAt - Unix timestamp of creation
  * @property {number} updatedAt - Unix timestamp of last update
  */
-export const exercises = createTable("exercises", {
-	id: text("id", { length: 36 })
-		.notNull()
-		.primaryKey()
-		.$defaultFn(() => crypto.randomUUID()),
-	name: text("name").notNull(),
-	category: text("category", {
-		enum: ["Strength", "Cardio", "Flexibility", "Balance", "Sport"],
-	}).notNull(),
-	description: text("description").notNull(),
-	how_to_perform: text("how_to_perform").notNull(),
-	difficulty: text("difficulty", {
-		enum: ["Beginner", "Intermediate", "Advanced"],
-	}).notNull(),
-	createdAt: int("created_at", { mode: "timestamp" })
-		.default(sql`(unixepoch())`)
-		.notNull(),
-	updatedAt: int("updatedAt", { mode: "timestamp" }).$onUpdate(
-		() => new Date(),
-	),
-});
+export const exercises = createTable(
+	"exercises",
+	{
+		id: text("id", { length: 36 })
+			.notNull()
+			.primaryKey()
+			.$defaultFn(() => crypto.randomUUID()),
+		name: text("name").notNull(),
+		category: text("category", {
+			enum: ["Strength", "Cardio", "Flexibility", "Balance", "Sport"],
+		}).notNull(),
+		description: text("description").notNull(),
+		how_to_perform: text("how_to_perform").notNull(),
+		difficulty: text("difficulty", {
+			enum: ["Beginner", "Intermediate", "Advanced"],
+		}).notNull(),
+		createdAt: int("created_at", { mode: "timestamp" })
+			.default(sql`(unixepoch())`)
+			.notNull(),
+		updatedAt: int("updatedAt", { mode: "timestamp" }).$onUpdate(
+			() => new Date(),
+		),
+	},
+	(table) => [uniqueIndex("exercise_name_unique_idx").on(table.name)],
+);
 
 /**
  * Equipment table storing available exercise equipment
@@ -138,20 +141,24 @@ export const exercises = createTable("exercises", {
  * @property {number} createdAt - Unix timestamp of creation
  * @property {number} updatedAt - Unix timestamp of last update
  */
-export const equipment = createTable("equipment", {
-	id: text("id", { length: 36 })
-		.notNull()
-		.primaryKey()
-		.$defaultFn(() => crypto.randomUUID()),
-	name: text("name").notNull(),
-	description: text("description"),
-	createdAt: int("created_at", { mode: "timestamp" })
-		.default(sql`(unixepoch())`)
-		.notNull(),
-	updatedAt: int("updatedAt", { mode: "timestamp" }).$onUpdate(
-		() => new Date(),
-	),
-});
+export const equipment = createTable(
+	"equipment",
+	{
+		id: text("id", { length: 36 })
+			.notNull()
+			.primaryKey()
+			.$defaultFn(() => crypto.randomUUID()),
+		name: text("name").notNull(),
+		description: text("description"),
+		createdAt: int("created_at", { mode: "timestamp" })
+			.default(sql`(unixepoch())`)
+			.notNull(),
+		updatedAt: int("updatedAt", { mode: "timestamp" }).$onUpdate(
+			() => new Date(),
+		),
+	},
+	(table) => [uniqueIndex("equipment_name_unique_idx").on(table.name)],
+);
 
 /**
  * Junction table for the many-to-many relationship between exercises and equipment
@@ -268,8 +275,7 @@ export const workoutPlans = createTable("workout_plans", {
 		.notNull()
 		.primaryKey()
 		.$defaultFn(() => crypto.randomUUID()),
-	userId: text("user_id")
-		.references(() => users.id),
+	userId: text("user_id").references(() => users.id),
 	name: text("name").notNull(),
 	description: text("description").notNull(),
 	difficulty: text("difficulty", {
@@ -435,21 +441,25 @@ export const personalRecords = createTable("personal_records", {
  * @property {number} createdAt - Unix timestamp of creation
  * @property {number} updatedAt - Unix timestamp of last update
  */
-export const muscles = createTable("muscles", {
-	id: text("id", { length: 36 })
-		.notNull()
-		.primaryKey()
-		.$defaultFn(() => crypto.randomUUID()),
-	name: text("name").notNull(),
-	description: text("description"),
-	is_front: int("is_front", { mode: "boolean" }).notNull(),
-	createdAt: int("created_at", { mode: "timestamp" })
-		.default(sql`(unixepoch())`)
-		.notNull(),
-	updatedAt: int("updatedAt", { mode: "timestamp" }).$onUpdate(
-		() => new Date(),
-	),
-});
+export const muscles = createTable(
+	"muscles",
+	{
+		id: text("id", { length: 36 })
+			.notNull()
+			.primaryKey()
+			.$defaultFn(() => crypto.randomUUID()),
+		name: text("name").notNull(),
+		description: text("description"),
+		is_front: int("is_front", { mode: "boolean" }).notNull(),
+		createdAt: int("created_at", { mode: "timestamp" })
+			.default(sql`(unixepoch())`)
+			.notNull(),
+		updatedAt: int("updatedAt", { mode: "timestamp" }).$onUpdate(
+			() => new Date(),
+		),
+	},
+	(table) => [uniqueIndex("muscle_name_unique_idx").on(table.name)],
+);
 
 /**
  * Junction table for the many-to-many relationship between exercises and muscles
@@ -458,21 +468,30 @@ export const muscles = createTable("muscles", {
  * @property {string} muscleId - Foreign key referencing the muscle
  * @property {("Primary"|"Secondary")} role - Whether this muscle is primary or secondary for the exercise
  */
-export const exerciseMuscles = createTable("exercise_muscles", {
-	id: text("id", { length: 36 })
-		.notNull()
-		.primaryKey()
-		.$defaultFn(() => crypto.randomUUID()),
-	exerciseId: text("exercise_id")
-		.notNull()
-		.references(() => exercises.id),
-	muscleId: text("muscle_id")
-		.notNull()
-		.references(() => muscles.id),
-	role: text("role", {
-		enum: ["Primary", "Secondary"],
-	}).default("Primary"),
-});
+export const exerciseMuscles = createTable(
+	"exercise_muscles",
+	{
+		id: text("id", { length: 36 })
+			.notNull()
+			.primaryKey()
+			.$defaultFn(() => crypto.randomUUID()),
+		exerciseId: text("exercise_id")
+			.notNull()
+			.references(() => exercises.id),
+		muscleId: text("muscle_id")
+			.notNull()
+			.references(() => muscles.id),
+		role: text("role", {
+			enum: ["Primary", "Secondary"],
+		}).default("Primary"),
+	},
+	(table) => [
+		uniqueIndex("exercise_muscle_unique_idx").on(
+			table.exerciseId,
+			table.muscleId,
+		),
+	],
+);
 
 /**
  * Relations configuration for exercises table
