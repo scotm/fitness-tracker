@@ -1,52 +1,270 @@
+import path from "node:path";
+import fs from "node:fs";
+
 import type { ExerciseInsert, EquipmentInsert, MuscleInsert } from "~/types";
 
-export const exerciseData: ExerciseInsert[] = [
-	{
-		name: "Push-ups",
-		category: "Strength",
-		description:
-			"A classic bodyweight exercise that targets the chest, shoulders, and triceps",
-		how_to_perform:
-			"1. Start in a plank position with your hands slightly wider than shoulder-width apart.\n2. Lower your body by bending your elbows, creating a 90-degree angle at your elbows.\n3. Push through your palms to straighten your elbows and return to the starting position.\n4. Repeat for the desired number of reps.",
-		difficulty: "Beginner",
-	},
-	{
-		name: "Pull-ups",
-		category: "Strength",
-		description:
-			"An upper body exercise that primarily targets the back and biceps",
-		how_to_perform:
-			"1. Hang from a pull-up bar with your hands slightly wider than shoulder-width apart.\n2. Pull yourself up until your chin is over the bar.\n3. Lower yourself back down to the starting position.\n4. Repeat for the desired number of reps.",
-		difficulty: "Intermediate",
-	},
-	{
-		name: "Squats",
-		category: "Strength",
-		description:
-			"A lower body compound exercise that targets the quadriceps, hamstrings, and glutes",
-		how_to_perform:
-			"1. Stand with your feet shoulder-width apart and your toes slightly turned out.\n2. Lower your body by bending your knees and pushing your hips back, as if sitting into a chair.\n3. Keep your back straight and your core engaged.\n4. Push through your heels to return to the starting position.\n5. Repeat for the desired number of reps.",
-		difficulty: "Beginner",
-	},
-	{
-		name: "Running",
-		category: "Cardio",
-		description:
-			"A fundamental cardio exercise that improves endurance and cardiovascular health",
-		how_to_perform:
-			"1. Run on a treadmill or outside\n2. Choose a comfortable pace and duration",
-		difficulty: "Beginner",
-	},
-	{
-		name: "Yoga Flow",
-		category: "Flexibility",
-		description:
-			"A series of poses that improve flexibility, balance, and mind-body connection",
-		how_to_perform:
-			"1. Start by standing with your feet shoulder-width apart and your toes slightly turned out.\n2. Push through your heels to return to the starting position.\n3. Repeat for the desired number of reps.",
-		difficulty: "Beginner",
-	},
-];
+// Function to load exercise fixture data from JSON files
+export function loadExerciseFixtures(): ExerciseInsert[] {
+	const fixturesDir = path.join(
+		process.cwd(),
+		"src/server/db/fixtures/llm-output/exercises/gpt-4o-2024-08-06",
+	);
+	const fixtures: ExerciseInsert[] = [];
+
+	try {
+		// Check if directory exists
+		if (!fs.existsSync(fixturesDir)) {
+			console.warn(`Fixtures directory not found: ${fixturesDir}`);
+			return [];
+		}
+
+		// Read all JSON files in the directory
+		const files = fs
+			.readdirSync(fixturesDir)
+			.filter((file) => file.endsWith(".json"));
+
+		for (const file of files) {
+			try {
+				const filePath = path.join(fixturesDir, file);
+				const fileContent = fs.readFileSync(filePath, "utf-8");
+				const exerciseData = JSON.parse(fileContent);
+
+				// Map the JSON data to ExerciseInsert format
+				const exercise: ExerciseInsert = {
+					name: exerciseData.name,
+					category: mapCategory(exerciseData),
+					description: exerciseData.short_summary || "",
+					how_to_perform: exerciseData.how_to_perform || "",
+					difficulty: mapDifficulty(exerciseData),
+				};
+
+				fixtures.push(exercise);
+			} catch (error) {
+				console.error(`Error processing file ${file}:`, error);
+			}
+		}
+	} catch (error) {
+		console.error("Error loading exercise fixtures:", error);
+	}
+
+	// Sort fixtures by name
+	fixtures.sort((a, b) => a.name.localeCompare(b.name));
+
+	return fixtures;
+}
+
+// Load fixture data
+export const exerciseData = loadExerciseFixtures();
+
+// Function to generate equipment relations from fixture data
+export function generateEquipmentRelations(): {
+	exerciseName: string;
+	equipmentNames: string[];
+}[] {
+	const relations: {
+		exerciseName: string;
+		equipmentNames: string[];
+	}[] = [];
+
+	try {
+		const fixturesDir = path.join(
+			process.cwd(),
+			"src/server/db/fixtures/llm-output/exercises/gpt-4o-2024-08-06",
+		);
+
+		if (!fs.existsSync(fixturesDir)) {
+			return [];
+		}
+
+		const files = fs
+			.readdirSync(fixturesDir)
+			.filter((file) => file.endsWith(".json"));
+
+		for (const file of files) {
+			try {
+				const filePath = path.join(fixturesDir, file);
+				const fileContent = fs.readFileSync(filePath, "utf-8");
+				const exerciseData = JSON.parse(fileContent);
+
+				if (
+					exerciseData.equipment_used &&
+					exerciseData.equipment_used.length > 0
+				) {
+					relations.push({
+						exerciseName: exerciseData.name,
+						equipmentNames: mapEquipmentNames(exerciseData.equipment_used),
+					});
+				}
+			} catch (error) {
+				console.error(
+					`Error processing equipment relations for file ${file}:`,
+					error,
+				);
+			}
+		}
+	} catch (error) {
+		console.error("Error generating equipment relations:", error);
+	}
+
+	return relations;
+}
+
+// Function to generate muscle relations from fixture data
+export function generateMuscleRelations(): {
+	exerciseName: string;
+	muscles: { name: string; role: "Primary" | "Secondary" }[];
+}[] {
+	const relations: {
+		exerciseName: string;
+		muscles: { name: string; role: "Primary" | "Secondary" }[];
+	}[] = [];
+
+	try {
+		const fixturesDir = path.join(
+			process.cwd(),
+			"src/server/db/fixtures/llm-output/exercises/gpt-4o-2024-08-06",
+		);
+
+		if (!fs.existsSync(fixturesDir)) {
+			return [];
+		}
+
+		const files = fs
+			.readdirSync(fixturesDir)
+			.filter((file) => file.endsWith(".json"));
+
+		for (const file of files) {
+			try {
+				const filePath = path.join(fixturesDir, file);
+				const fileContent = fs.readFileSync(filePath, "utf-8");
+				const exerciseData = JSON.parse(fileContent);
+
+				if (exerciseData.muscles_used && exerciseData.muscles_used.length > 0) {
+					relations.push({
+						exerciseName: exerciseData.name,
+						muscles: mapMuscleNames(exerciseData.muscles_used),
+					});
+				}
+			} catch (error) {
+				console.error(
+					`Error processing muscle relations for file ${file}:`,
+					error,
+				);
+			}
+		}
+	} catch (error) {
+		console.error("Error generating muscle relations:", error);
+	}
+
+	return relations;
+}
+
+// Helper function to map equipment names to match existing records
+function mapEquipmentNames(equipmentList: string[]): string[] {
+	const equipmentMap: Record<string, string> = {
+		"pull-up bar": "Pull-up Bar",
+		"pullup bar": "Pull-up Bar",
+		dumbbell: "Dumbbells",
+		dumbbells: "Dumbbells",
+		barbell: "Barbell",
+		kettlebell: "Kettlebell",
+		"resistance band": "Resistance Bands",
+		"resistance bands": "Resistance Bands",
+		"gym mat": "Gym Mat",
+		mat: "Gym Mat",
+		bench: "Bench",
+		"swiss ball": "Swiss Ball",
+		"exercise ball": "Swiss Ball",
+		"stability ball": "Swiss Ball",
+		"jump rope": "Jump Rope",
+		"sz-bar": "SZ-Bar",
+		"ez bar": "SZ-Bar",
+		"ez-bar": "SZ-Bar",
+	};
+
+	return equipmentList.map((item) => {
+		const lowerItem = item.toLowerCase();
+		return equipmentMap[lowerItem] || item;
+	});
+}
+
+// Helper function to map muscle names to match existing records
+function mapMuscleNames(
+	muscleList: string[],
+): { name: string; role: "Primary" | "Secondary" }[] {
+	const muscleMap: Record<string, string> = {
+		chest: "Chest (Pectoralis)",
+		pectorals: "Chest (Pectoralis)",
+		pectoralis: "Chest (Pectoralis)",
+		pecs: "Chest (Pectoralis)",
+		back: "Back (Latissimus Dorsi)",
+		lats: "Back (Latissimus Dorsi)",
+		"latissimus dorsi": "Back (Latissimus Dorsi)",
+		shoulders: "Shoulders (Deltoids)",
+		deltoids: "Shoulders (Deltoids)",
+		delts: "Shoulders (Deltoids)",
+		biceps: "Biceps",
+		triceps: "Triceps",
+		quads: "Quadriceps",
+		quadriceps: "Quadriceps",
+		hamstrings: "Hamstrings",
+		glutes: "Glutes",
+		"gluteus maximus": "Glutes",
+		calves: "Soleus",
+		abs: "Abs",
+		abdominals: "Abs",
+		"rectus abdominis": "Abs",
+		core: "Core",
+		traps: "Trapezius",
+		trapezius: "Trapezius",
+		"lower back": "Erector spinae",
+		"erector spinae": "Erector spinae",
+		obliques: "Obliques",
+	};
+
+	return muscleList.map((muscle) => {
+		const lowerMuscle = muscle.toLowerCase();
+		const mappedName = muscleMap[lowerMuscle] || muscle;
+
+		// Assign all as Primary for simplicity
+		return { name: mappedName, role: "Primary" };
+	});
+}
+
+// Helper function to map category
+function mapCategory(
+	exerciseData: Record<string, unknown>,
+): "Strength" | "Cardio" | "Flexibility" | "Balance" | "Sport" {
+	if (!exerciseData.category || typeof exerciseData.category !== "string")
+		return "Strength";
+
+	switch (exerciseData.category.toLowerCase()) {
+		case "strength":
+			return "Strength";
+		case "cardio":
+			return "Cardio";
+		case "flexibility":
+			return "Flexibility";
+		case "balance":
+			return "Balance";
+		case "sport":
+			return "Sport";
+		default:
+			return "Strength";
+	}
+}
+
+// Helper function to map difficulty
+function mapDifficulty(
+	exerciseData: Record<string, unknown>,
+): "Beginner" | "Intermediate" | "Advanced" {
+	// Default to Intermediate if no clear difficulty is found
+	return "Intermediate";
+}
+
+// Generate equipment and muscle relations
+const fixtureEquipmentRelations = generateEquipmentRelations();
+const fixtureMuscleRelations = generateMuscleRelations();
 
 export const equipmentData: EquipmentInsert[] = [
 	{
@@ -193,6 +411,8 @@ export const exerciseEquipmentRelations: {
 		exerciseName: "Yoga Flow",
 		equipmentNames: ["Gym Mat"],
 	},
+	// Add fixture equipment relations
+	...fixtureEquipmentRelations,
 ];
 
 // Define exercise-muscle relationships
@@ -227,6 +447,8 @@ export const exerciseMuscleRelations: {
 			{ name: "Core", role: "Secondary" },
 		],
 	},
+	// Add fixture muscle relations
+	...fixtureMuscleRelations,
 ];
 
 export const defaultUser = {

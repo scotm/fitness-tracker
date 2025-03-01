@@ -22,6 +22,9 @@ export const env = createEnv({
 		NODE_ENV: z
 			.enum(["development", "test", "production"])
 			.default("development"),
+		OPENAI_BASEURL: z.string().url().optional(),
+		OPENAI_API_KEY: z.string().optional(),
+		OPENAI_API_MODEL: z.string().optional(),
 	},
 
 	/**
@@ -48,6 +51,9 @@ export const env = createEnv({
 		AUTH_GITHUB_SECRET: process.env.AUTH_GITHUB_SECRET,
 		DATABASE_URL: process.env.DATABASE_URL,
 		NODE_ENV: process.env.NODE_ENV,
+		OPENAI_BASEURL: process.env.OPENAI_BASEURL,
+		OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+		OPENAI_API_MODEL: process.env.OPENAI_API_MODEL,
 	},
 	/**
 	 * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
