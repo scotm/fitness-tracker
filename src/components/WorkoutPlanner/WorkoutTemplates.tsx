@@ -43,6 +43,12 @@ const MOCK_TEMPLATES: WorkoutTemplate[] = [
 					{ id: "set2", setNumber: 2, targetReps: 8, targetWeight: 155 },
 					{ id: "set3", setNumber: 3, targetReps: 6, targetWeight: 175 },
 				],
+				muscles: ["chest", "triceps", "deltoids", "pectorals"],
+				equipment: ["barbell"],
+				how_to_perform:
+					"Lie on a bench with a barbell in your hands. Lower the barbell to your chest, then push it back up to the starting position.",
+				createdAt: new Date(),
+				updatedAt: new Date(),
 			},
 			{
 				id: "ex3",
@@ -56,6 +62,12 @@ const MOCK_TEMPLATES: WorkoutTemplate[] = [
 					{ id: "set5", setNumber: 2, targetReps: 8, targetWeight: 205 },
 					{ id: "set6", setNumber: 3, targetReps: 6, targetWeight: 225 },
 				],
+				muscles: ["quadriceps", "hamstrings", "glutes", "adductors"],
+				equipment: ["barbell"],
+				how_to_perform:
+					"Stand with feet shoulder-width apart. Lower your body by bending your knees and hips, then push through your heels to return to the starting position.",
+				createdAt: new Date(),
+				updatedAt: new Date(),
 			},
 		],
 	},
@@ -76,6 +88,12 @@ const MOCK_TEMPLATES: WorkoutTemplate[] = [
 					{ id: "set2", setNumber: 2, targetReps: 8, targetWeight: 155 },
 					{ id: "set3", setNumber: 3, targetReps: 6, targetWeight: 175 },
 				],
+				muscles: ["chest", "triceps", "deltoids", "pectorals"],
+				equipment: ["barbell"],
+				how_to_perform:
+					"Lie on a bench with a barbell in your hands. Lower the barbell to your chest, then push it back up to the starting position.",
+				createdAt: new Date(),
+				updatedAt: new Date(),
 			},
 			{
 				id: "ex2",
@@ -89,6 +107,12 @@ const MOCK_TEMPLATES: WorkoutTemplate[] = [
 					{ id: "set5", setNumber: 2, targetReps: 8, targetWeight: 0 },
 					{ id: "set6", setNumber: 3, targetReps: 8, targetWeight: 0 },
 				],
+				muscles: ["chest", "triceps", "deltoids", "pectorals"],
+				equipment: ["barbell"],
+				how_to_perform:
+					"Grab a pull-up bar with an overhand grip. Pull yourself up until your chin is over the bar, then lower yourself back down.",
+				createdAt: new Date(),
+				updatedAt: new Date(),
 			},
 		],
 	},

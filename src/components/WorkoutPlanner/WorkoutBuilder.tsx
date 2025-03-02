@@ -160,6 +160,9 @@ const ExerciseItem = ({
 							<div className="text-sm text-muted-foreground">
 								{exercise.description}
 							</div>
+							<div className="text-sm text-muted-foreground">
+								{exercise.how_to_perform}
+							</div>
 						</div>
 					</div>
 
@@ -176,9 +179,9 @@ const ExerciseItem = ({
 				<div className="flex flex-wrap gap-1 mb-4">
 					<Badge variant="secondary">{exercise.category}</Badge>
 					<Badge variant="outline">{exercise.difficulty}</Badge>
-					{exercise.targetMuscles && (
+					{exercise.muscles && (
 						<Badge variant="outline" className="bg-primary/10">
-							{exercise.targetMuscles}
+							{exercise.muscles}
 						</Badge>
 					)}
 				</div>

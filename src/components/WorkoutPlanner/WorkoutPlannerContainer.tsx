@@ -10,17 +10,12 @@ import WorkoutTemplates from "~/components/WorkoutPlanner/WorkoutTemplates";
 import RestTimer from "~/components/WorkoutPlanner/RestTimer";
 import { Button } from "~/components/ui/button";
 import { PlusCircle, Save } from "lucide-react";
+import type { AppRouter } from "~/server/api/root";
+import type { inferProcedureOutput } from "@trpc/server";
+
+type Exercise = inferProcedureOutput<AppRouter["exercise"]["getAll"]>[number];
 
 // Define interfaces for our components
-export interface Exercise {
-	id: string;
-	name: string;
-	category: string;
-	difficulty: string;
-	targetMuscles?: string;
-	equipment?: string[];
-	description: string;
-}
 
 export interface WorkoutExercise extends Exercise {
 	order: number;
