@@ -85,10 +85,12 @@ export default function ExerciseSearch({ onAddExercise }: ExerciseSearchProps) {
 			const matchesMuscles =
 				selectedMuscles.length === 0
 					? true
-					: selectedMuscles.some((muscle) => exercise.muscles.includes(muscle));
+					: selectedMuscles.every((muscle) =>
+							exercise.muscles.includes(muscle),
+						);
 
 			return (
-				matchesSearch && matchesCategory && matchesDifficulty // && matchesMuscles
+				matchesSearch && matchesCategory && matchesDifficulty && matchesMuscles
 			);
 		});
 
@@ -208,6 +210,11 @@ export default function ExerciseSearch({ onAddExercise }: ExerciseSearchProps) {
 				</Popover>
 
 				<div className="space-y-2 max-h-[400px] overflow-y-auto pr-2">
+					{filteredExercises.length > 0 && (
+						<div className="text-smtext-center py-2 text-muted-foreground">
+							{filteredExercises.length} exercises found.
+						</div>
+					)}
 					{filteredExercises.length > 0 ? (
 						filteredExercises.map((exercise) => (
 							<div
@@ -226,9 +233,6 @@ export default function ExerciseSearch({ onAddExercise }: ExerciseSearchProps) {
 										<Badge variant="outline">{exercise.difficulty}</Badge>
 										<Badge variant="outline">{exercise.category}</Badge>
 										{exercise.muscles.map((muscle) => {
-											console.log(
-												`${muscle}__${exercise.id}__${exercise.name}`,
-											);
 											return (
 												<Badge
 													key={`${muscle}__${exercise.id}__${exercise.name}`}
