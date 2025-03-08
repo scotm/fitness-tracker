@@ -15,7 +15,6 @@ export const muscleRouter = createTRPCRouter({
 		.input(muscleInsertSchema)
 		.mutation(async ({ ctx, input }) => {
 			await ctx.db.insert(muscles).values({
-				id: crypto.randomUUID(),
 				name: input.name,
 				description: input.description,
 				is_front: input.is_front,
