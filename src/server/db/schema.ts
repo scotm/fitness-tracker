@@ -133,6 +133,23 @@ export const exercises = createTable(
 	(table) => [uniqueIndex("exercise_name_unique_idx").on(table.name)],
 );
 
+export const exerciseAlternativeNames = createTable(
+	"exercise_alternative_names",
+	{
+		id: text("id", { length: 36 })
+			.notNull()
+			.primaryKey()
+			.$defaultFn(() => crypto.randomUUID()),
+		exerciseId: text("exercise_id")
+			.notNull()
+			.references(() => exercises.id),
+		alternativeName: text("alternative_name").notNull(),
+		createdAt: int("created_at", { mode: "timestamp" })
+			.default(sql`(unixepoch())`)
+			.notNull(),
+	},
+);
+
 /**
  * Equipment table storing available exercise equipment
  * @property {string} id - Unique identifier for the equipment
